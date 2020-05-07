@@ -7,6 +7,7 @@
 - Draw the US Map and plot the nodes on it
 - Have a macro for enabling/disabling drawing using SFML -DDRAW -DVISUAL
 something like that
+- Add a test case (?) a smaller file with fewer points and a known path
 
 ___
 
