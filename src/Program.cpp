@@ -38,8 +38,8 @@ Program::Program(const char* filename, const uint16_t win_width, const uint16_t 
 	// Initialize the background image for drawing
 	m_background_texture.loadFromFile("../img/US-B&W.png");
 	m_background_sprite.setTexture(m_background_texture);
-	m_background_sprite.setScale(win_width / 512.f + 0.25f, win_height / 341.f + 0.23f);
-	m_background_sprite.move(-112.f, -54.f);
+	m_background_sprite.setScale(win_width / 512.f + 0.62f, win_height / 341.f + 0.6f);
+	m_background_sprite.move(-138.f, -81.f);
 
 	// Reserve some space in the vector, even though the max data is 48 Cities
 	m_cities.reserve(8U);
