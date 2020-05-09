@@ -1,6 +1,6 @@
 CXX=g++-10
-CXX_FLAGS=-Wall -Wextra -Wshadow -Wpedantic -O3 -g3 -std=c++2a
-CXX_LIBS=`pkg-config --libs --cflags sfml-all`
+CXX_FLAGS=-Wall -Wextra -Wshadow -Wpedantic -O3 -g3 -std=c++2a -DENABLE_SFML
+CXX_LIBS=`pkg-config --libs --cflags sfml-all` -lfmt
 
 EXEC_NAME=TSP
 OBJECTS=$(patsubst %.cpp,%.o,$(wildcard *.cpp))

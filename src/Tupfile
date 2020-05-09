@@ -1,4 +1,6 @@
 include_rules
 
-: foreach *.cpp | *.hpp |> !cxx |>
-: *.o |> $(CXX) -o %o %f $(CXX_LIBS) $(CXX_FLAGS) |> $(EXE)
+CXX_FLAGS += -DENABLE_SFML
+
+: foreach *.cpp | *.hpp |> !cxx |> {objs}
+: {objs} |> $(CXX) -o %o %f $(CXX_LIBS) $(CXX_FLAGS) |> $(EXE)
