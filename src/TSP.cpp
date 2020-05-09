@@ -8,11 +8,19 @@ constexpr bool enable_sfml = false;
 constexpr bool enable_sfml = true;
 #endif
 
+#define DEBUG 0
+
+#if DEBUG
+#	define FILE "test.txt"
+#else
+#	define FILE "cities.txt"
+#endif
+
 int main()
 {
 	if constexpr(enable_sfml)
 	{
-		Program program("../data/test.txt", 1290U, 860U);
+		Program program("../data/" FILE, 1440U, 920U);
 		program.run();
 	}
 

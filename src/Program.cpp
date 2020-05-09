@@ -4,20 +4,28 @@
 
 static void normalizeCities(Program& program)
 {
-	[[maybe_unused]] const auto x_offset =
-		program.window().getSize().x * 0.14545f;	// Ooh magic numbers
-	[[maybe_unused]] const auto y_offset =
-		program.window().getSize().y * 0.15117f;	// Ooh magic numbers
+	const auto start_x_offset = program.window().getSize().x * 0.14545f;	// Ooh magic numbers
+	const auto start_y_offset = program.window().getSize().y * 0.15117f;	// Ooh magic numbers
+	const auto end_x_offset = program.window().getSize().x * 0.78182f;
+	const auto end_y_offset = program.window().getSize().y * 0.77442f;
 
-	const float x_scale = 1;
-	const float y_scale = 2;
+	const auto city_x_range = program.bottomRight().x - program.topLeft().x;
+	const auto city_y_range = program.bottomRight().y - program.topLeft().y;
 
-	std::for_each(program.cities().begin(),
-				  program.cities().end(),
-				  [&x_scale, &y_scale](auto&& city) { city.normalize(x_scale, y_scale); });
+	const float x_scale = (end_x_offset - start_x_offset) / (city_x_range);
+	const float y_scale = (end_y_offset - start_y_offset) / (city_y_range);
+
+	// I'm sorry for all the stupid calculations, just in case I change the window size in the
+	// future, I don't want to mess the calculations.
+	// These just determine where the city drawing
+	// should start, hopefully inside the US map I chose
+
+	std::for_each(program.cities().begin(), program.cities().end(), [&](auto&& city) {
+		city.normalize(x_scale, y_scale, start_x_offset, start_y_offset);
+	});
 }
 
-Program::Program(const char* filename, uint16_t win_width, uint16_t win_height) :
+Program::Program(const char* filename, const uint16_t win_width, const uint16_t win_height) :
 	m_window(sf::VideoMode(win_width, win_height),
 			 "Travelling Salesman",
 			 sf::Style::Close | sf::Style::Titlebar),
@@ -30,7 +38,8 @@ Program::Program(const char* filename, uint16_t win_width, uint16_t win_height) 
 	// Initialize the background image for drawing
 	m_background_texture.loadFromFile("../img/US-B&W.png");
 	m_background_sprite.setTexture(m_background_texture);
-	m_background_sprite.setScale(win_width / 512.f, win_height / 341.f);
+	m_background_sprite.setScale(win_width / 512.f + 0.25f, win_height / 341.f + 0.23f);
+	m_background_sprite.move(-112.f, -54.f);
 
 	// Reserve some space in the vector, even though the max data is 48 Cities
 	m_cities.reserve(8U);
@@ -106,6 +115,11 @@ void Program::run()
 			}
 		}
 		m_window.draw(m_background_sprite);
+
+		for(const auto& city: m_cities)
+		{
+			m_window.draw(city);
+		}
 
 		m_window.display();
 	}

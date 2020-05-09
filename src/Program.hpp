@@ -10,8 +10,8 @@ class Program final
 {
 	public:
 	Program(const char* filename_of_city_data = "../data/cities.txt",
-			uint16_t win_width = 1280U,
-			uint16_t win_height = 900U);
+			const uint16_t win_width = 1280U,
+			const uint16_t win_height = 900U);
 	~Program();
 
 	void setBackground(const sf::Color);
@@ -22,6 +22,9 @@ class Program final
 
 	std::vector<City>& cities() { return m_cities; }
 	const std::vector<City>& cities() const { return m_cities; }
+
+	const sf::Vector2<uint16_t>& topLeft() const { return m_top_left; }
+	const sf::Vector2<uint16_t>& bottomRight() const { return m_bottom_right; }
 
 	private:
 	sf::RenderWindow m_window;

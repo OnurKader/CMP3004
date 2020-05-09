@@ -15,16 +15,19 @@ struct City final : sf::Drawable
 	float distSqr(const City &) const;
 	static float distSqr(const City &, const City &);
 
-	void normalize(const float scale_x, const float scale_y)
+	void normalize(const float scale_x,
+				   const float scale_y,
+				   const float x_offset,
+				   const float y_offset)
 	{
-		m_window_position = {x * scale_x, y * scale_y};
+		m_window_position = {x * scale_x + x_offset, y * scale_y + y_offset};
 	}
 
 	sf::Vector2<uint16_t> position;
 	uint16_t &x = position.x;
 	uint16_t &y = position.y;
 	uint8_t index;
-	uint8_t radius {32U};
+	uint8_t radius {6U};
 	sf::Color color {sf::Color::Green};
 
 	private:
