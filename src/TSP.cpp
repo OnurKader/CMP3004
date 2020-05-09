@@ -12,11 +12,11 @@ int main()
 {
 	if constexpr(enable_sfml)
 	{
-		Program program("../data/test.txt", 1280U, 900U);
-		//	window.run();
+		Program program("../data/test.txt", 1290U, 860U);
+		program.run();
 	}
 
-	fmt::print("Thanks! Hope you enjoyed my program ^_^\n");
+	//	fmt::print("Thanks! Hope you enjoyed my program ^_^\n");
 
 	return 0;
 }
