@@ -67,6 +67,7 @@
 
 # End of https://www.gitignore.io/api/c++,qtcreator
 tags
-TSM
+TSP
 .ccls-cache/
 links
+.tup/

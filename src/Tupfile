@@ -1,0 +1,4 @@
+include_rules
+
+: foreach *.cpp | *.hpp |> !cxx |>
+: *.o |> $(CXX) -o %o %f $(CXX_LIBS) $(CXX_FLAGS) |> $(EXE)

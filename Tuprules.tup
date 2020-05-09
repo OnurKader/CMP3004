@@ -1,0 +1,8 @@
+CXX :=g++-10
+CXX_FLAGS := -Wall -Wextra -Wpedantic -Wshadow -O3 -flto -std=c++2a
+CXX_LIBS := `pkg-config --cflags --libs sfml-all` -lfmt
+
+EXE := TSP
+
+!cxx = |> $(CXX) -c %f -o %o $(CXX_LIBS) $(CXX_FLAGS) |> %B.o
+
