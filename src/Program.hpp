@@ -3,7 +3,6 @@
 #include "City.hpp"
 
 #include <SFML/Graphics.hpp>
-#include <array>
 #include <fmt/format.h>
 #include <vector>
 
