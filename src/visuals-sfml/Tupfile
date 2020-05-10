@@ -1,6 +1,4 @@
 include_rules
 
-CXX_FLAGS += -DENABLE_SFML
-
 : foreach *.cpp | *.hpp |> !cxx |> {objs}
 : {objs} |> $(CXX) -o %o %f $(CXX_LIBS) $(CXX_FLAGS) |> $(EXE)
