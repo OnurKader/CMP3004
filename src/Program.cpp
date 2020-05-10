@@ -58,7 +58,8 @@ Program::Program(const char* filename, const uint16_t win_width, const uint16_t 
 			 "Travelling Salesman",
 			 sf::Style::Close | sf::Style::Titlebar,
 			 settings),
-	m_background_color(sf::Color::Black)
+	m_background_color(sf::Color::Black),
+	m_vertex_array(sf::LineStrip)
 {
 	m_window.setVerticalSyncEnabled(true);
 	m_window.setActive(true);
@@ -104,17 +105,14 @@ Program::Program(const char* filename, const uint16_t win_width, const uint16_t 
 	// update the positions of every City
 	normalizeCities(*this);
 
+	// Prepare the VertexArray for drawing
+	m_vertex_array.resize(m_cities.size());
 	//	fmt::print("File {} parsed successfully with {} cities\n", filename, m_cities.size());
 }
 
 Program::~Program() { m_window.close(); }
 
 void Program::setBackground(const sf::Color color) { m_background_color = color; }
-
-std::array greyscale_table = {
-	30U,  34U,	38U,  42U,	46U,  50U,	54U,  58U,	62U,  66U,	70U,  74U,	78U,  82U,	86U,  90U,
-	94U,  98U,	102U, 106U, 110U, 114U, 118U, 122U, 126U, 130U, 134U, 138U, 142U, 146U, 150U, 154U,
-	158U, 162U, 166U, 170U, 174U, 178U, 182U, 186U, 190U, 194U, 198U, 202U, 206U, 210U, 214U, 218U};
 
 bool Program::run()
 {
@@ -143,17 +141,8 @@ bool Program::run()
 	m_window.clear(m_background_color);
 #endif
 
-	// Temp vertex array calculations for edge drawings
-	sf::VertexArray edges(sf::LineStrip, m_cities.size());
 
-	for(size_t i = 0ULL; i < edges.getVertexCount(); ++i)
-	{
-		edges[i].position = m_cities[i].windowPosition();
-		const auto grey = greyscale_table[i];
-		edges[i].color = sf::Color(128U - grey, grey, 255 - grey);
-	}
-
-	m_window.draw(edges);
+	m_window.draw(m_vertex_array);
 
 	for(const auto& city: m_cities)
 	{

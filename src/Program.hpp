@@ -26,6 +26,9 @@ class Program final
 	const sf::Vector2<uint16_t>& topLeft() const { return m_top_left; }
 	const sf::Vector2<uint16_t>& bottomRight() const { return m_bottom_right; }
 
+	sf::VertexArray& vertexArray() { return m_vertex_array; }
+	const sf::VertexArray& vertexArray() const { return m_vertex_array; }
+
 	private:
 	void handleBackground();
 
@@ -33,6 +36,7 @@ class Program final
 	sf::Color m_background_color;
 	sf::Texture m_background_texture;
 	sf::Sprite m_background_sprite;
+	sf::VertexArray m_vertex_array;
 
 	std::vector<City> m_cities;
 
