@@ -2,7 +2,7 @@ CXX=g++-10
 CXX_FLAGS=-Wall -Wextra -Wshadow -Wpedantic -O3 -std=c++2a
 CXX_LIBS=
 
-EXEC_NAME=TSP
+EXEC_NAME=TSP_File
 OBJECTS=$(patsubst %.cpp,%.o,$(wildcard *.cpp))
 REBUILDABLES=$(EXEC_NAME) $(OBJECTS)
 
