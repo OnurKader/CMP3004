@@ -1,3 +1,4 @@
+#include "Algorithms.hpp"
 #include "Program.hpp"
 
 #include <SFML/Graphics.hpp>
@@ -26,6 +27,7 @@ int main()
 	if constexpr(enable_sfml)
 	{
 		Program program("../data/" FILE, 1440U, 920U);
+		Lexicographical lex(program);
 		// Use a function here before running and see the output on the window!
 		//		bruteForce(program);
 		while(program.window().isOpen())
