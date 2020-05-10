@@ -48,7 +48,7 @@ int main()
 			}
 			auto& last = program.vertexArray()[program.vertexArray().getVertexCount() - 1ULL];
 			last.position = program.cities()[0].windowPosition();
-			auto grey = greyscale_table[8U * 4U + 1U];
+			auto grey = greyscale_table[9U * 4U + 1U];
 			last.color = sf::Color(128U - grey, grey, 255U - grey);
 
 			if(!program.run())
