@@ -1,7 +1,6 @@
 include_rules
 
-CXX_LIBS += `pkg-config --cflags --libs sfml-all` -lfmt
-EXE := TSP_Window
+EXE := TSP_File
 
 : foreach *.cpp | *.hpp |> !cxx |> {objs}
 : {objs} |> $(CXX) -o %o %f $(CXX_LIBS) $(CXX_FLAGS) |> $(EXE)
