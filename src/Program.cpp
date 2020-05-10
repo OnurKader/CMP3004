@@ -106,7 +106,7 @@ Program::Program(const char* filename, const uint16_t win_width, const uint16_t 
 	normalizeCities(*this);
 
 	// Prepare the VertexArray for drawing
-	m_vertex_array.resize(m_cities.size());
+	m_vertex_array.resize(m_cities.size() + 1ULL);
 	//	fmt::print("File {} parsed successfully with {} cities\n", filename, m_cities.size());
 }
 
@@ -140,7 +140,6 @@ bool Program::run()
 #else
 	m_window.clear(m_background_color);
 #endif
-
 
 	m_window.draw(m_vertex_array);
 

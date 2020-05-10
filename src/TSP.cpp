@@ -29,15 +29,27 @@ int main()
 		Program program("../data/" FILE, 1440U, 920U);
 		Lexicographical lex(program);
 		// Use a function here before running and see the output on the window!
-		//		bruteForce(program);
+
+		for(size_t i = 0ULL; i < program.cities().size() - 1ULL; ++i)
+		{
+			fmt::print("Distance between {} and {} is: {:.1f}\n",
+					   i,
+					   i + 1,
+					   program.cities()[i].dist(program.cities()[i + 1]));
+		}
+
 		while(program.window().isOpen())
 		{
-			for(size_t i = 0ULL; i < program.vertexArray().getVertexCount(); ++i)
+			for(size_t i = 0ULL; i < program.vertexArray().getVertexCount() - 1ULL; ++i)
 			{
 				program.vertexArray()[i].position = program.cities()[i].windowPosition();
 				const auto grey = greyscale_table[i * 4U + 1U];
 				program.vertexArray()[i].color = sf::Color(128U - grey, grey, 255U - grey);
 			}
+			auto& last = program.vertexArray()[program.vertexArray().getVertexCount() - 1ULL];
+			last.position = program.cities()[0].windowPosition();
+			auto grey = greyscale_table[8U * 4U + 1U];
+			last.color = sf::Color(128U - grey, grey, 255U - grey);
 
 			if(!program.run())
 				break;
