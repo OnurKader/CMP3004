@@ -37,8 +37,9 @@ void City::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	sf::CircleShape circle;
 	circle.setRadius(radius);
 	circle.setFillColor(color);
-	circle.setPosition(m_window_position);
 	circle.setPointCount(9U);
+	circle.setPosition(m_window_position);
+	circle.move(-radius, -radius);
 
 	target.draw(circle, states);
 }

@@ -15,7 +15,7 @@ class Program final
 	~Program();
 
 	void setBackground(const sf::Color);
-	void run();
+	bool run();
 
 	sf::RenderWindow& window() { return m_window; }
 	const sf::RenderWindow& window() const { return m_window; }
@@ -27,6 +27,8 @@ class Program final
 	const sf::Vector2<uint16_t>& bottomRight() const { return m_bottom_right; }
 
 	private:
+	void handleBackground();
+
 	sf::RenderWindow m_window;
 	sf::Color m_background_color;
 	sf::Texture m_background_texture;
@@ -34,6 +36,6 @@ class Program final
 
 	std::vector<City> m_cities;
 
-	sf::Vector2<uint16_t> m_top_left {65535U, 65535U};
+	sf::Vector2<uint16_t> m_top_left {65534U, 65534U};
 	sf::Vector2<uint16_t> m_bottom_right {0U, 0U};
 };

@@ -8,7 +8,7 @@ constexpr bool enable_sfml = false;
 constexpr bool enable_sfml = true;
 #endif
 
-#define DEBUG 0
+#define DEBUG 1
 
 #if DEBUG
 #	define FILE "test.txt"
@@ -21,7 +21,13 @@ int main()
 	if constexpr(enable_sfml)
 	{
 		Program program("../data/" FILE, 1440U, 920U);
-		program.run();
+		// Use a function here before running and see the output on the window!
+		//		bruteForce(program);
+		while(program.window().isOpen())
+		{
+			if(!program.run())
+				break;
+		}
 	}
 
 	//	fmt::print("Thanks! Hope you enjoyed my program ^_^\n");

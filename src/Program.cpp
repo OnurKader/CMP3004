@@ -1,19 +1,34 @@
 #include "Program.hpp"
 
+#include <array>
 #include <fstream>
 
 static void normalizeCities(Program& program)
 {
+	// THE UGLIEST CODE I'VE SEEN, command line options, or even a config file would have been much
+	// better than this monstrosity
+#ifdef BACKGROUND
 	const auto start_x_offset = program.window().getSize().x * 0.14545f;	// Ooh magic numbers
 	const auto start_y_offset = program.window().getSize().y * 0.15117f;	// Ooh magic numbers
 	const auto end_x_offset = program.window().getSize().x * 0.78182f;
 	const auto end_y_offset = program.window().getSize().y * 0.77442f;
+#else
+	const auto start_x_offset = program.window().getSize().x * 0.02f;
+	const auto start_y_offset = program.window().getSize().y * 0.02f;
+	const auto end_x_offset = program.window().getSize().x * 0.81f;
+	const auto end_y_offset = program.window().getSize().y * 0.82f;
+#endif
 
 	const auto city_x_range = program.bottomRight().x - program.topLeft().x;
 	const auto city_y_range = program.bottomRight().y - program.topLeft().y;
 
+#ifdef BACKGROUND
 	const float x_scale = (end_x_offset - start_x_offset) / (city_x_range);
 	const float y_scale = (end_y_offset - start_y_offset) / (city_y_range);
+#else
+	const float x_scale = (end_x_offset - start_x_offset) / (city_x_range) + .027f;
+	const float y_scale = (end_y_offset - start_y_offset) / (city_y_range) + .025f;
+#endif
 
 	// I'm sorry for all the stupid calculations, just in case I change the window size in the
 	// future, I don't want to mess the calculations.
@@ -25,24 +40,36 @@ static void normalizeCities(Program& program)
 	});
 }
 
+void Program::handleBackground()
+{
+	// Initialize the background image for drawing
+	m_background_texture.loadFromFile("../img/US-B&W.png");
+	m_background_sprite.setTexture(m_background_texture);
+	m_background_sprite.setScale(m_window.getSize().x / 512.f + 0.62f,
+								 m_window.getSize().y / 341.f + 0.6f);
+	m_background_sprite.move(-138.f, -81.f);
+	m_background_sprite.setColor(sf::Color(48U, 48U, 48U));
+}
+
+const sf::ContextSettings settings(0, 0, 6U);
+
 Program::Program(const char* filename, const uint16_t win_width, const uint16_t win_height) :
 	m_window(sf::VideoMode(win_width, win_height),
 			 "Travelling Salesman",
-			 sf::Style::Close | sf::Style::Titlebar),
+			 sf::Style::Close | sf::Style::Titlebar,
+			 settings),
 	m_background_color(sf::Color::Black)
 {
 	m_window.setVerticalSyncEnabled(true);
 	m_window.setActive(true);
 	m_window.setPosition({960 - win_width / 2, 540 - win_height / 2});
 
-	// Initialize the background image for drawing
-	m_background_texture.loadFromFile("../img/US-B&W.png");
-	m_background_sprite.setTexture(m_background_texture);
-	m_background_sprite.setScale(win_width / 512.f + 0.62f, win_height / 341.f + 0.6f);
-	m_background_sprite.move(-138.f, -81.f);
+#ifdef BACKGROUND
+	handleBackground();
+#endif
 
 	// Reserve some space in the vector, even though the max data is 48 Cities
-	m_cities.reserve(8U);
+	m_cities.reserve(48U);
 
 	// Read the given file and extract cities with the coordinates
 	std::ifstream city_file(filename);
@@ -57,8 +84,10 @@ Program::Program(const char* filename, const uint16_t win_width, const uint16_t 
 	uint8_t index = 0U;
 	while(city_file.good())
 	{
-		uint16_t x, y;
+		uint16_t x = 1337U, y = 4269U;
 		city_file >> x >> y;
+		if(city_file.eof())
+			break;
 		m_cities.emplace_back(x, y, index++);
 
 		// Find the top-left most and bottom-right most(?) points as reference of the scale for the
@@ -69,14 +98,6 @@ Program::Program(const char* filename, const uint16_t win_width, const uint16_t 
 		m_bottom_right.x = std::max(m_bottom_right.x, x);
 		m_bottom_right.y = std::max(m_bottom_right.y, y);
 	}
-	// Erase the last element because >> reads the last city twice
-	m_cities.pop_back();
-
-	fmt::print("Top-Left: ({}, {})\nBottom-Right: ({}, {})\n",
-			   m_top_left.x,
-			   m_top_left.y,
-			   m_bottom_right.x,
-			   m_bottom_right.y);
 
 	// TODO: Deal with the scale later, maybe don't make City drawable
 	// I think I'll do a function call to something like normalizeCities or which will
@@ -90,37 +111,55 @@ Program::~Program() { m_window.close(); }
 
 void Program::setBackground(const sf::Color color) { m_background_color = color; }
 
-void Program::run()
+std::array greyscale_table = {
+	30U,  34U,	38U,  42U,	46U,  50U,	54U,  58U,	62U,  66U,	70U,  74U,	78U,  82U,	86U,  90U,
+	94U,  98U,	102U, 106U, 110U, 114U, 118U, 122U, 126U, 130U, 134U, 138U, 142U, 146U, 150U, 154U,
+	158U, 162U, 166U, 170U, 174U, 178U, 182U, 186U, 190U, 194U, 198U, 202U, 206U, 210U, 214U, 218U};
+
+bool Program::run()
 {
-	while(m_window.isOpen())
+	sf::Event event;
+	while(m_window.pollEvent(event))
 	{
-		//		m_window.clear(m_background_color);
-
-		sf::Event event;
-		while(m_window.pollEvent(event))
+		switch(event.type)
 		{
-			switch(event.type)
+			case sf::Event::Closed: return false;
+			case sf::Event::KeyPressed:
 			{
-				case sf::Event::Closed: return;
-				case sf::Event::KeyPressed:
+				switch(event.key.code)
 				{
-					switch(event.key.code)
-					{
-						case sf::Keyboard::Escape: [[fallthrough]];
-						case sf::Keyboard::Q: return;
-						default: break;
-					}
+					case sf::Keyboard::Escape: [[fallthrough]];
+					case sf::Keyboard::Q: return false;
+					default: break;
 				}
-				default: break;
 			}
+			default: break;
 		}
-		m_window.draw(m_background_sprite);
-
-		for(const auto& city: m_cities)
-		{
-			m_window.draw(city);
-		}
-
-		m_window.display();
 	}
+
+#ifdef BACKGROUND
+	m_window.draw(m_background_sprite);
+#else
+	m_window.clear(m_background_color);
+#endif
+
+	// Temp vertex array calculations for edge drawings
+	sf::VertexArray edges(sf::LineStrip, m_cities.size());
+
+	for(size_t i = 0ULL; i < edges.getVertexCount(); ++i)
+	{
+		edges[i].position = m_cities[i].windowPosition();
+		const auto grey = greyscale_table[i];
+		edges[i].color = sf::Color(128U - grey, grey, 255 - grey);
+	}
+
+	m_window.draw(edges);
+
+	for(const auto& city: m_cities)
+	{
+		m_window.draw(city);
+	}
+
+	m_window.display();
+	return true;
 }

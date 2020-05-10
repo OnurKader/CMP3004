@@ -5,7 +5,7 @@
 
 struct City final : sf::Drawable
 {
-	City(uint16_t _x = 0U, uint16_t _y = 0U, uint8_t _index = 0U);
+	City(uint16_t _x, uint16_t _y, uint8_t _index = 0U);
 
 	bool operator<=>(const City &) const = default;
 
@@ -23,11 +23,14 @@ struct City final : sf::Drawable
 		m_window_position = {x * scale_x + x_offset, y * scale_y + y_offset};
 	}
 
-	sf::Vector2<uint16_t> position;
-	uint16_t &x = position.x;
-	uint16_t &y = position.y;
+	sf::Vector2f &windowPosition() { return m_window_position; }
+	const sf::Vector2f &windowPosition() const { return m_window_position; }
+
+	const sf::Vector2<uint16_t> position;
+	const uint16_t &x = position.x;
+	const uint16_t &y = position.y;
 	uint8_t index;
-	uint8_t radius {6U};
+	uint8_t radius {5U};
 	sf::Color color {sf::Color::Green};
 
 	private:
