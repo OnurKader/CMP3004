@@ -8,11 +8,12 @@
 ## Dependencies
 
 You can build without [SFML](https://sfml-dev.org/),
-_later on there will be a separate file without any graphics_, if you remove the
+~~later on there will be a separate file without any graphics, if you remove the
 `-DENABLE_SFML` setting in either the `Makefile` or
-`Tupfile` whatever build system you choose
+`Tupfile` whatever build system you choose~~, there are two seperate directories
+for that, but the one without visuals doesn't have anything yet
 
-Currently I'm using [{libfmt}](https://fmt.dev/) for my iostream needs, if you
+Currently I'm using [{fmt}](https://fmt.dev/) for my iostream needs, if you
 don't want to install it, go through the code and replace `fmt::print()` calls
 
 A `C++2a` compatible compiler
