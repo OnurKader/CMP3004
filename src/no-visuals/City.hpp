@@ -3,6 +3,9 @@
 #include <array>
 #include <cmath>
 #include <cstdint>
+#include <numeric>
+#include <utility>
+#include <vector>
 
 namespace ctx
 {
@@ -25,11 +28,43 @@ constexpr T sqrt(T x)
 {
 	return sqrt_helper<T>(x, 0, x / 2 + 1);
 }
+
+template<typename T, size_t S>
+constexpr std::array<T, S> makeAndFillArray()
+{
+	std::array<T, S> temp;
+	std::iota(temp.begin(), temp.end(), 0ULL);
+	return temp;
+}
+
+constexpr size_t factorial(size_t num)
+{
+	size_t result = num;
+	while(--num)
+		result *= num;
+	return result;
+}
+
+template<typename T, size_t S>
+constexpr std::array<std::array<T, S>, factorial(S)> generateArrays()
+{
+	std::array<std::array<T, S>, factorial(S)> temp;
+	std::generate(temp.begin(), temp.end(), makeAndFillArray<T, S>);
+	return temp;
+}
+
+template<typename T, size_t S>
+constexpr void permutate(std::array<T, S>& arr, const size_t n)
+{
+	for(size_t i = 0ULL; i < n; ++i)
+		std::next_permutation(arr.begin(), arr.end());
+}
+
 }	 // namespace ctx
 
 struct City final
 {
-	constexpr City(uint16_t _x, uint16_t _y) : x(_x), y(_y) {}
+	constexpr City(const uint16_t _x, const uint16_t _y) : x(_x), y(_y) {}
 	constexpr float dist(const City& other) const
 	{
 		const auto _x = std::max(x, other.x) - std::min(x, other.x);
@@ -41,7 +76,7 @@ struct City final
 	uint16_t y;
 };
 
-constexpr static std::array cities {
+[[maybe_unused]] constexpr static std::array cities {
 	City(6734, 1453), City(2233, 10),	City(5530, 1424), City(401, 841),	City(3082, 1644),
 	City(7608, 4458), City(7573, 3716), City(7265, 1268), City(6898, 1885), City(1112, 2049),
 	City(5468, 2606), City(5989, 2873), City(4706, 2674), City(4612, 2035), City(6347, 2683),
@@ -53,11 +88,11 @@ constexpr static std::array cities {
 	City(4985, 140),  City(1916, 1569), City(7280, 4899), City(7509, 3239), City(10, 2676),
 	City(6807, 2993), City(5185, 3258), City(3023, 1942)};
 
-constexpr static std::array test_cities {City(56, 220),
-										 City(700, 1003),
-										 City(3520, 17),
-										 City(455, 3206),
-										 City(5879, 6238),
-										 City(121, 617),
-										 City(99, 2000),
-										 City(4621, 3023)};
+[[maybe_unused]] constexpr static std::array test_cities {City(56, 220),
+														  City(700, 1003),
+														  City(3520, 17),
+														  City(455, 3206),
+														  City(5879, 6238),
+														  City(121, 617),
+														  City(99, 2000),
+														  City(4621, 3023)};
