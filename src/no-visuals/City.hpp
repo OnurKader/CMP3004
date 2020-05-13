@@ -7,7 +7,7 @@
 struct City final
 {
 	constexpr City(const uint16_t _x, const uint16_t _y) : x(_x), y(_y) {}
-	constexpr float dist(const City& other) const
+	constexpr float dist(const City& other) const noexcept
 	{
 		const auto _x = std::max(x, other.x) - std::min(x, other.x);
 		const auto _y = std::max(y, other.y) - std::min(y, other.y);
