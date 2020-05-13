@@ -13,6 +13,9 @@ void printArray(const std::array<T, S>& arr)
 
 int main()
 {
+	// FIXME: Not `constexpr` enough, make a generatePermutations function which returns permutated
+	// factorial(8ULL) array of arrays
+
 	auto permutation_arrays = ctx::generateArrays<uint16_t, 8ULL>();
 	std::for_each(permutation_arrays.begin(),
 				  permutation_arrays.end(),
