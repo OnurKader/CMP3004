@@ -1,17 +1,18 @@
 #include "City.hpp"
 #include "ExhaustiveSearch.hpp"
+#include "NearestNeighbour.hpp"
 
 #include <iostream>
 
 int main()
 {
-	constexpr auto& city_array = cities;
-	rt::Timer main("Main");
+	auto& city_array = test_cities;
+	rt::Timer t_main("Main");
 
 	{
-		rt::Timer exhaustive("Exhaustive Search");
-		ExhaustiveSearch<uint16_t, city_array.size()> es;
-		es.exec(city_array, 2U);
+		rt::Timer t_nearest("Nearest Neighbour");
+		NearestNeighbour<uint16_t, city_array.size()> nn;
+		nn.exec(city_array, 1U);
 	}
 
 	return 0;

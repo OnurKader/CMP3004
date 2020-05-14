@@ -19,6 +19,9 @@ class ExhaustiveSearch
 		m_shortest_path.fill(T {});
 	}
 
+	// TODO: Store the shortest path in the array and save it to a local file at the end of
+	// Exhaustive Search's life?
+
 	// Multi-threaded for_each?
 	float exec(const std::array<City, S>& city_array, const uint8_t log_level = 0U)
 	{

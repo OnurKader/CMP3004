@@ -14,14 +14,15 @@ struct City final
 		return ctx::sqrt((_x * _x) + (_y * _y));
 	}
 
-	constexpr void toggleVisited() noexcept { visited = !visited; }
+	constexpr bool operator==(const City& other) const { return (x == other.x && y == other.y); }
+	constexpr bool operator!=(const City& other) const { return (x != other.x || y != other.y); }
 
 	uint16_t x;
 	uint16_t y;
 	bool visited;
 };
 
-[[maybe_unused]] constexpr static std::array cities {
+[[maybe_unused]] static std::array cities {
 	City(6734, 1453), City(2233, 10),	City(5530, 1424), City(401, 841),	City(3082, 1644),
 	City(7608, 4458), City(7573, 3716), City(7265, 1268), City(6898, 1885), City(1112, 2049),
 	City(5468, 2606), City(5989, 2873), City(4706, 2674), City(4612, 2035), City(6347, 2683),
@@ -33,14 +34,14 @@ struct City final
 	City(4985, 140),  City(1916, 1569), City(7280, 4899), City(7509, 3239), City(10, 2676),
 	City(6807, 2993), City(5185, 3258), City(3023, 1942)};
 
-[[maybe_unused]] constexpr static std::array test_cities {City(56, 220),
-														  City(700, 1003),
-														  City(3520, 17),
-														  City(455, 3206),
-														  City(5879, 6238),
-														  City(121, 617),
-														  City(99, 2000),
-														  City(4621, 3023)};
+[[maybe_unused]] static std::array test_cities {City(56, 220),
+												City(700, 1003),
+												City(3520, 17),
+												City(455, 3206),
+												City(5879, 6238),
+												City(121, 617),
+												City(99, 2000),
+												City(4621, 3023)};
 
 // Find the total distance of a given array of Cities
 template<size_t S>

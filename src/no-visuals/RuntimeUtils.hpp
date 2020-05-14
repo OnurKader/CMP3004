@@ -1,5 +1,7 @@
 #pragma once
 
+#include "City.hpp"
+
 #include <array>
 #include <chrono>
 #include <iostream>
@@ -38,5 +40,11 @@ struct Timer final
 	const hr_clock::time_point m_time;
 	const std::string_view m_name;
 };
+
+template<size_t S>
+void setVisitedOfCities(std::array<City, S>& cities, const bool visited = false)
+{
+	std::for_each(cities.begin(), cities.end(), [visited](auto&& city) { city.visited = visited; });
+}
 
 }	 // namespace rt
