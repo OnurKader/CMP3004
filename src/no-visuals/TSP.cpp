@@ -34,19 +34,6 @@ constexpr void printArray(const std::array<T, S>& arr) noexcept
 
 int main()
 {
-	{
-		Timer timer0("Overall Generate + print");
-		// 6 elements blow out compiler constexpr range, so I'll leave this now, move on to a
-		// different branch and do the runtime version of this
-		constexpr auto permutation_arrays = ctx::generateArrays<uint16_t, 5ULL>();
-
-		{
-			Timer timer1("Printage");
-			for(const auto& arr: permutation_arrays)
-				printArray(arr);
-		}
-	}
-
 	for(size_t i = 0ULL; i < test_cities.size() - 1ULL; ++i)
 	{
 		std::cout << test_cities[i].dist(test_cities[i + 1ULL]) << '\n';
