@@ -6,16 +6,19 @@
 
 struct City final
 {
-	constexpr City(const uint16_t _x, const uint16_t _y) : x(_x), y(_y) {}
+	constexpr City(const uint16_t _x, const uint16_t _y) : x(_x), y(_y), visited(false) {}
 	constexpr float dist(const City& other) const noexcept
 	{
-		const auto _x = std::max(x, other.x) - std::min(x, other.x);
-		const auto _y = std::max(y, other.y) - std::min(y, other.y);
+		const uint16_t _x = std::max(x, other.x) - std::min(x, other.x);
+		const uint16_t _y = std::max(y, other.y) - std::min(y, other.y);
 		return ctx::sqrt((_x * _x) + (_y * _y));
 	}
 
+	constexpr void toggleVisited() noexcept { visited = !visited; }
+
 	uint16_t x;
 	uint16_t y;
+	bool visited;
 };
 
 [[maybe_unused]] constexpr static std::array cities {
@@ -38,3 +41,21 @@ struct City final
 														  City(121, 617),
 														  City(99, 2000),
 														  City(4621, 3023)};
+
+// Find the total distance of a given array of Cities
+template<size_t S>
+constexpr float getTotalDistanceOfCities(const std::array<City, S>& city_arr,
+										 const std::array<uint16_t, S>& index_array) noexcept
+{
+	float result = 0ULL;
+
+	for(size_t i = 0ULL; i < index_array.size() - 1ULL; ++i)
+	{
+		auto index = index_array[i];
+		result += city_arr[index].dist(city_arr[index + 1ULL]);
+	}
+
+	result += city_arr[index_array.front()].dist(city_arr[index_array.back()]);
+
+	return result;
+}

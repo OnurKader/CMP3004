@@ -1,7 +1,5 @@
 #pragma once
 
-#include "City.hpp"
-
 #include <array>
 #include <chrono>
 #include <iostream>
@@ -27,12 +25,15 @@ struct Timer final
 	{
 		const int64_t duration_as_T =
 			std::chrono::duration_cast<std::chrono::microseconds>(hr_clock::now() - m_time).count();
-		std::clog << m_name << " took " << duration_as_T << " µs, " << duration_as_T / 1000L
+		std::cout << m_name << " took " << duration_as_T << " µs, " << duration_as_T / 1000L
 				  << " ms\n";
 	}
 
 	Timer(const Timer&) = delete;
 	Timer(Timer&&) = delete;
+
+	auto operator=(const Timer&) = delete;
+	auto operator=(Timer&&) = delete;
 
 	const hr_clock::time_point m_time;
 	const std::string_view m_name;

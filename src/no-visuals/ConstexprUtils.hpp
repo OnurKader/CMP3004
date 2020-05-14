@@ -1,11 +1,15 @@
 #pragma once
 
+#include "City.hpp"
+
 #include <algorithm>
 #include <array>
 #include <cstdint>
 #include <numeric>
 
 namespace ctx
+{
+namespace integ
 {
 template<typename T>
 constexpr T sqrt_helper(T x, T lo, T hi) noexcept
@@ -26,6 +30,19 @@ constexpr T sqrt(T x) noexcept
 {
 	return sqrt_helper<T>(x, 0, x / 2 + 1);
 }
+}	 // namespace integ
+
+constexpr float sqrtNewtonRaphson(float x, float curr, float prev)
+{
+	return curr == prev ? curr : sqrtNewtonRaphson(x, 0.5 * (curr + x / curr), curr);
+}
+
+constexpr float sqrt(float x) noexcept
+{
+	return x >= 0. && x < std::numeric_limits<float>::infinity()
+			   ? sqrtNewtonRaphson(x, x, 0)
+			   : std::numeric_limits<float>::quiet_NaN();
+}
 
 template<typename T, size_t S>
 constexpr std::array<T, S> makeAndFillArray() noexcept
@@ -42,6 +59,7 @@ constexpr size_t factorial(size_t num) noexcept
 		result *= num;
 	return result;
 }
+
 template<typename T, size_t S>
 constexpr void permutate(std::array<T, S>& arr, const size_t n)
 {

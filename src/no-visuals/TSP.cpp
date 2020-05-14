@@ -1,15 +1,18 @@
 #include "City.hpp"
 #include "ExhaustiveSearch.hpp"
-#include "RuntimeUtils.hpp"
+
+#include <iostream>
 
 int main()
 {
-	rt::Timer timer("Distance");
-	for(size_t i = 0ULL; i < test_cities.size() - 1ULL; ++i)
+	constexpr auto& city_array = cities;
+	rt::Timer main("Main");
+
 	{
-		std::cout << test_cities[i].dist(test_cities[i + 1ULL]) << '\n';
+		rt::Timer exhaustive("Exhaustive Search");
+		ExhaustiveSearch<uint16_t, city_array.size()> es;
+		es.exec(city_array, 2U);
 	}
-	std::cout << test_cities.back().dist(test_cities.front()) << '\n';
 
 	return 0;
 }
