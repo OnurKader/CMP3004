@@ -36,8 +36,8 @@ constexpr float sqrtNewtonRaphson(float x, float curr, float prev)
 
 constexpr float sqrt(float x) noexcept
 {
-	return x >= 0. && x < std::numeric_limits<float>::infinity()
-			   ? sqrtNewtonRaphson(x, x, 0)
+	return x >= 0.f && x < std::numeric_limits<float>::infinity()
+			   ? sqrtNewtonRaphson(x, x, 0.f)
 			   : std::numeric_limits<float>::quiet_NaN();
 }
 

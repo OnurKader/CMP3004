@@ -4,6 +4,7 @@
 
 #include <array>
 #include <chrono>
+#include <cmath>
 #include <iostream>
 #include <string_view>
 
@@ -41,10 +42,27 @@ struct Timer final
 	const std::string_view m_name;
 };
 
-template<size_t S>
-void setVisitedOfCities(std::array<City, S>& cities, const bool visited = false)
+inline float dist(const City& first, const City& second)
 {
-	std::for_each(cities.begin(), cities.end(), [visited](auto&& city) { city.visited = visited; });
+	const float dx = second.x - first.x;
+	const float dy = second.y - first.y;
+	return std::hypot(dx, dy);
 }
 
+template<size_t S>
+float getTotalDistanceOfCities(const std::array<City, S>& city_arr,
+							   const std::array<uint16_t, S>& index_array)
+{
+	float result = 0.f;
+
+	for(size_t i = 0ULL; i < index_array.size() - 1ULL; ++i)
+	{
+		auto index = index_array[i];
+		result += dist(city_arr[index], city_arr[index + 1ULL]);
+	}
+
+	result += dist(city_arr[index_array.front()], city_arr[index_array.back()]);
+
+	return result;
+}
 }	 // namespace rt
