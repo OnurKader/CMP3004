@@ -5,7 +5,7 @@
 #include <array>
 #include <fmt/format.h>
 
-#if 1
+#if 0
 #define FILE "test.txt"
 #else
 #define FILE "cities.txt"
@@ -31,15 +31,19 @@ int main()
 	}
 
 	// [ 0, 5, 1, 6, 3, 7, 2, 4, 0 ]
+	// [ 0, 8, 37, 30, 43, 17, 6, 27, 35, 29, 5, 36, 18, 26, 42, 16, 45, 32, 14, 11, 10, 22, 13, 24,
+	// 12, 20, 46, 19, 39, 2, 21, 15, 40, 33, 28, 4, 47, 38, 31, 23, 9, 41, 25, 3, 34, 44, 1, 7 ]
 
 	while(program.window().isOpen())
 	{
 		/* for(size_t i = 0ULL; i < program.vertexArray().getVertexCount() - 1ULL; ++i) */
 		size_t count = 0ULL;
-		for(const size_t i: {0, 5, 1, 6, 3, 7, 2, 4})
+		for(const size_t i: {0,	 8,	 37, 30, 43, 17, 6,	 27, 35, 29, 5,	 36, 18, 26, 42, 16,
+							 45, 32, 14, 11, 10, 22, 13, 24, 12, 20, 46, 19, 39, 2,	 21, 15,
+							 40, 33, 28, 4,	 47, 38, 31, 23, 9,	 41, 25, 3,	 34, 44, 1,	 7})
 		{
 			program.vertexArray()[count].position = program.cities()[i].windowPosition();
-			const auto grey = greyscale_table[i * 4U + 1U];
+			const auto grey = greyscale_table[i];
 			program.vertexArray()[count++].color = sf::Color(128U - grey, grey, 255U - grey);
 		}
 		auto& last = program.vertexArray()[program.vertexArray().getVertexCount() - 1ULL];
@@ -55,3 +59,4 @@ int main()
 
 	return 0;
 }
+
