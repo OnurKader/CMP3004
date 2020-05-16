@@ -14,11 +14,7 @@ template<typename T, size_t S>
 class NearestNeighbour final
 {
 	public:
-	NearestNeighbour()
-	{
-		std::iota(m_index_array.begin(), m_index_array.end(), T {});
-		//		m_index_array.back() = 0U;
-	}
+	NearestNeighbour() { std::iota(m_index_array.begin(), m_index_array.end(), T {}); }
 
 	float exec(std::array<City, S>& city_array, const uint8_t log_level = 0U)
 	{
@@ -32,8 +28,6 @@ class NearestNeighbour final
 			// Store the next city's index in the array
 			m_index_array[array_index_to_store_closest_city++] = index_to_query;
 
-			// Recursion with the returned city?
-
 			switch(log_level)
 			{
 				case 0U: break;
@@ -43,8 +37,9 @@ class NearestNeighbour final
 			}
 		}
 
-		// Everything is visited, connect last visited city with the first one
-		//		rt::printArray(m_index_array);
+		// Everything is visited, time to end and return the distance of the array, the final
+		// connection is done in the getTot... func call
+		rt::printArray(m_index_array);
 
 		return getTotalDistanceOfCities(city_array, m_index_array);
 	}
@@ -67,10 +62,7 @@ class NearestNeighbour final
 			auto& current_city = city_array[i];
 			if(!current_city.visited && queried_index != i)
 			{
-				const float distance = rt::dist(city_array[queried_index], current_city);
-//				std::cout << "Distance (" << city_array[queried_index].x << ", "
-//						  << city_array[queried_index].y << ") and (" << current_city.x << ", "
-//						  << current_city.y << ") is " << distance << std::endl;
+				const float distance = city_array[queried_index].dist(current_city);
 				if(distance < record_distance)
 				{
 					closest_index = i;
