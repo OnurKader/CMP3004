@@ -18,41 +18,40 @@ class NearestNeighbour final
 	NearestNeighbour() : m_shortest_distance(FLT_MAX)
 	{
 		std::iota(m_array.begin(), m_array.end(), T {});
-		m_shortest_path.fill(T {});
+		m_array.back() = 0U;
 	}
-
-	struct NearestCity
-	{
-		City city;
-		uint16_t index;
-		float distance;
-	};
 
 	float exec(std::array<City, S>& city_array, const uint8_t log_level = 0U)
 	{
 		uint16_t index_to_query = 0U;
-		while(std::all_of(
+		size_t array_index_to_store_closest_city = 1ULL;
+		while(!std::all_of(
 			city_array.cbegin(), city_array.cend(), [](const auto& elem) { return elem.visited; }))
 		{
-			const NearestCity nc = findNearestCity(city_array, index_to_query);
+			index_to_query = findNearestCity(city_array, index_to_query);
+
+			// Store the next city's index in the array
+			m_array[array_index_to_store_closest_city++] = index_to_query;
+
 			// Recursion with the returned city?
 
 			switch(log_level)
 			{
 				case 0U: break;
 				default:
-					std::cout << nc.distance << " units and City index " << nc.index << std::endl;
+					std::cout << index_to_query << ": (" << city_array[index_to_query].x << ", "
+							  << city_array[index_to_query].y << ")\n";
 			}
 		}
 
 		// Everything is visited, connect last visited city with the first one
+		rt::printArray(m_array);
 
 		return m_shortest_distance;
 	}
 
 	private:
-	std::array<T, S> m_array;
-	std::array<T, S> m_shortest_path;
+	std::array<T, S + 1ULL> m_array;
 	float m_shortest_distance;
 
 	// Utility function that traverses through all the cities and finds the smallest distance from
@@ -60,9 +59,10 @@ class NearestNeighbour final
 
 	// Should this just return the index, or maybe the index + distance in an std::pair
 	// No real reason to get the city, we just hold the indices for the edges
-	NearestCity findNearestCity(std::array<City, S>& city_array, const uint16_t queried_index) const
+	uint16_t findNearestCity(std::array<City, S>& city_array, const uint16_t queried_index) const
 	{
-		NearestCity nc {city_array[queried_index], 0ULL, FLT_MAX};
+		uint16_t closest_index = queried_index;
+		float record_distance = FLT_MAX;
 
 		for(size_t i = 0ULL; i < city_array.size(); ++i)
 		{
@@ -70,12 +70,10 @@ class NearestNeighbour final
 			if(!current_city.visited && queried_index != i)
 			{
 				const float dist = city_array[queried_index].dist(current_city);
-				if(dist < nc.distance)
+				if(dist < record_distance)
 				{
-					// Store the closest city
-					nc.city = current_city;
-					nc.index = i;
-					nc.distance = dist;
+					closest_index = i;
+					record_distance = dist;
 				}
 			}
 		}
@@ -86,8 +84,8 @@ class NearestNeighbour final
 		// that the whole array has been visited and it's time to connect the last city with the
 		// first one to complete our cycle.
 		city_array[queried_index].visited = true;
-		nc.city.visited = true;
+		city_array[closest_index].visited = true;
 
-		return nc;
+		return closest_index;
 	}
 };

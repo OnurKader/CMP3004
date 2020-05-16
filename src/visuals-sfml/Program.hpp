@@ -43,3 +43,4 @@ class Program final
 	sf::Vector2<uint16_t> m_top_left {65534U, 65534U};
 	sf::Vector2<uint16_t> m_bottom_right {0U, 0U};
 };
+

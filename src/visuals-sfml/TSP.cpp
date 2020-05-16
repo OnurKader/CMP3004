@@ -6,9 +6,9 @@
 #include <fmt/format.h>
 
 #if 1
-#	define FILE "test.txt"
+#define FILE "test.txt"
 #else
-#	define FILE "cities.txt"
+#define FILE "cities.txt"
 #endif
 
 constexpr std::array greyscale_table = {
@@ -30,13 +30,17 @@ int main()
 				   program.cities()[i].dist(program.cities()[i + 1]));
 	}
 
+	// [ 0, 5, 1, 6, 3, 7, 2, 4, 0 ]
+
 	while(program.window().isOpen())
 	{
-		for(size_t i = 0ULL; i < program.vertexArray().getVertexCount() - 1ULL; ++i)
+		/* for(size_t i = 0ULL; i < program.vertexArray().getVertexCount() - 1ULL; ++i) */
+		size_t count = 0ULL;
+		for(const size_t i: {0, 5, 1, 6, 3, 7, 2, 4})
 		{
-			program.vertexArray()[i].position = program.cities()[i].windowPosition();
+			program.vertexArray()[count].position = program.cities()[i].windowPosition();
 			const auto grey = greyscale_table[i * 4U + 1U];
-			program.vertexArray()[i].color = sf::Color(128U - grey, grey, 255U - grey);
+			program.vertexArray()[count++].color = sf::Color(128U - grey, grey, 255U - grey);
 		}
 		auto& last = program.vertexArray()[program.vertexArray().getVertexCount() - 1ULL];
 		last.position = program.cities()[0].windowPosition();
