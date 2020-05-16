@@ -6,6 +6,6 @@
 2: (3520, 17)
 4: (5879, 6238)
 [ 0, 5, 1, 6, 3, 7, 2, 4 ]
-Distance: 34554.7
-Nearest Neighbour took 205 µs, 0 ms
-Main took 212 µs, 0 ms
+Distance: 25919.3
+Nearest Neighbour took 349 µs, 0 ms
+Main took 365 µs, 0 ms

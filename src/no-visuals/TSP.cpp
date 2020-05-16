@@ -11,7 +11,7 @@ int main()
 	{
 		rt::Timer t_nearest("Nearest Neighbour");
 		NearestNeighbour<uint16_t, city_array.size()> nn;
-		float distance = nn.exec(city_array, 0U);
+		float distance = nn.exec(city_array, 1U);
 		distance += 1.f;
 		std::cout << "Distance: " << distance << std::endl;
 	}

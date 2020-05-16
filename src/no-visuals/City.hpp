@@ -22,7 +22,7 @@ struct City final
 	bool visited;
 };
 
-[[maybe_unused]] static std::array cities {
+[[maybe_unused]] static std::array cities{
 	City(6734, 1453), City(2233, 10),	City(5530, 1424), City(401, 841),	City(3082, 1644),
 	City(7608, 4458), City(7573, 3716), City(7265, 1268), City(6898, 1885), City(1112, 2049),
 	City(5468, 2606), City(5989, 2873), City(4706, 2674), City(4612, 2035), City(6347, 2683),
@@ -34,14 +34,14 @@ struct City final
 	City(4985, 140),  City(1916, 1569), City(7280, 4899), City(7509, 3239), City(10, 2676),
 	City(6807, 2993), City(5185, 3258), City(3023, 1942)};
 
-[[maybe_unused]] static std::array test_cities {City(56, 220),
-												City(700, 1003),
-												City(3520, 17),
-												City(455, 3206),
-												City(5879, 6238),
-												City(121, 617),
-												City(99, 2000),
-												City(4621, 3023)};
+[[maybe_unused]] static std::array test_cities{City(56, 220),
+											   City(700, 1003),
+											   City(3520, 17),
+											   City(455, 3206),
+											   City(5879, 6238),
+											   City(121, 617),
+											   City(99, 2000),
+											   City(4621, 3023)};
 
 template<size_t S>
 constexpr float getTotalDistanceOfCities(const std::array<City, S>& city_arr,
@@ -51,11 +51,13 @@ constexpr float getTotalDistanceOfCities(const std::array<City, S>& city_arr,
 
 	for(size_t i = 0ULL; i < index_array.size() - 1ULL; ++i)
 	{
-		auto index = index_array[i];
-		result += city_arr[index].dist(city_arr[index + 1ULL]);
+		const uint16_t current_index = index_array[i];
+		const uint16_t next_index = index_array[i + 1ULL];
+		result += city_arr[current_index].dist(city_arr[next_index]);
 	}
 
 	result += city_arr[index_array.front()].dist(city_arr[index_array.back()]);
 
 	return result;
 }
+
