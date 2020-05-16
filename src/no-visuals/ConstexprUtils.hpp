@@ -1,10 +1,7 @@
 #pragma once
 
-#include "City.hpp"
-
 #include <algorithm>
 #include <array>
-#include <cstdint>
 #include <numeric>
 
 namespace ctx

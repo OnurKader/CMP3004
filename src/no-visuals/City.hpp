@@ -43,12 +43,11 @@ struct City final
 												City(99, 2000),
 												City(4621, 3023)};
 
-// Find the total distance of a given array of Cities
 template<size_t S>
 constexpr float getTotalDistanceOfCities(const std::array<City, S>& city_arr,
 										 const std::array<uint16_t, S>& index_array) noexcept
 {
-	float result = 0ULL;
+	float result = 0.f;
 
 	for(size_t i = 0ULL; i < index_array.size() - 1ULL; ++i)
 	{
