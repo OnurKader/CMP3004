@@ -1,7 +1,5 @@
 # TODO's
 
-## _Find Group Mates_
-
 ## Design
 
 - ~~Draw the US Map and plot the nodes on it~~
@@ -13,21 +11,19 @@ ___
 
 ## Programming
 
-- Make a graph data structure
+- Make a graph data structure (?)
   - Circular Linked List maybe? Look at Python code
     Wasn't listening to the lectures
   - ~~Do some C++17 stuff, ask the teacher about C++20~~ C++20 it is
   - Use smart\_pointers and the _**STL** for most things_
 - Implement the 3 algorithms first, look for more efficient ones later
+  - ~~Exhaustive, Permutation~~
+  - ~~Neares Neighbour~~
   - Coding Trains video, and other resources
   - Genetic as well
-
-___
-
-## Presentation
-
-- Get some pretty clothes
-- Decide on how to record the screen, regular OBS/ffmpeg or from phone?
+- Remove all instances of sqrt, constexpr or not, just square everything,
+see if you get the same result, if it's the same, just removing sqrt
+should result in a big boost in performance
 
 ___
 
