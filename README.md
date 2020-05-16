@@ -3,7 +3,7 @@
 ## Travelling Salesman Problem in C++(20)
 
 **Solving the classic TSP with some popular algorithms like the Exhaustive, O(n!),**
-**Greedy Nearest Neighbour, etc. TODO**
+**Greedy Nearest Neighbour, O(n²), etc. TODO**
 
 ## Dependencies
 
@@ -16,14 +16,21 @@ for that, but the one without visuals doesn't have anything yet
 Currently I'm using [{fmt}](https://fmt.dev/) for my iostream needs, if you
 don't want to install it, go through the code and replace `fmt::print()` calls
 
-A `C++2a` compatible compiler
+A `C++2a` compatible compiler, I'm using GCC-10.1
 
 ## Screenshots
 
 _**TODO**_
+
 ![Nearest Neighbour 48](img/48-nn.png "48 City NN")
 
 ## Usage
 
 _**TODO**_
+
+## Contributors
+
+- Eren ÖZDEMİR
+- Oktay Mert AKÜZÜM
+- Onur Orkun KADER
 
