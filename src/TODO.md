@@ -18,7 +18,7 @@ ___
   - Use smart\_pointers and the _**STL** for most things_
 - Implement the 3 algorithms first, look for more efficient ones later
   - ~~Exhaustive, Permutation~~
-  - ~~Neares Neighbour~~
+  - ~~Nearest Neighbour~~
   - Coding Trains video, and other resources
   - Genetic as well
 - Remove all instances of sqrt, constexpr or not, just square everything,
