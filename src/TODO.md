@@ -20,7 +20,8 @@ ___
   - ~~Exhaustive, Permutation~~
   - ~~Nearest Neighbour~~
   - Coding Trains video, and other resources
-  - Genetic as well
+  - Genetic Algorithm
+  - Jupyter'e bakmak gerek
 - Remove all instances of sqrt, constexpr or not, just square everything,
 see if you get the same result, if it's the same, just removing sqrt
 should result in a big boost in performance
