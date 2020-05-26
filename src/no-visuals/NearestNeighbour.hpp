@@ -6,10 +6,9 @@
 #include <array>
 #include <cfloat>
 #include <fmt/format.hpp>
+#include <fstream>
 #include <numeric>
 
-// Inheritance with a base class of Algorithm which holds the arrays and the distance, also the exec
-// function
 template<typename T, size_t S>
 class NearestNeighbour final
 {
@@ -41,7 +40,9 @@ public:
 
 		// Everything is visited, time to end and return the distance of the array, the final
 		// connection is done in the getTot... func call
-		fmt::print("{}\n", m_index_array);
+		std::ofstream nn_out("nn_output.txt");
+		if(nn_out)
+			fmt::print(nn_out, "{}\n", m_index_array);
 
 		return getTotalDistanceOfCities(city_array, m_index_array);
 	}

@@ -49,13 +49,8 @@ public:
 
 		// TODO: save to file here
 		std::ofstream exhaustive_out("exhaustive-out.txt");
-		if(!exhaustive_out)
-		{
-			fmt::print(stderr, "Couldn't open file to write\n");
-			return m_shortest_distance;
-		}
-
-		fmt::print(exhaustive_out, "{}\n", m_array);
+		if(exhaustive_out)
+			fmt::print(exhaustive_out, "{}\n", m_array);
 
 		return m_shortest_distance;
 	}

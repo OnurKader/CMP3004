@@ -10,10 +10,10 @@ int main()
 
 	{
 		rt::Timer t_nearest("Nearest Neighbour");
-		//		NearestNeighbour<uint16_t, city_array.size()> nn;
-		//		float distance = nn.exec(city_array, 1U);
-		ExhaustiveSearch<uint16_t, city_array.size()> es;
-		float distance = es.exec(city_array, 2U);
+		NearestNeighbour<uint16_t, city_array.size()> nn;
+		float distance = nn.exec(city_array, 1U);
+		//		ExhaustiveSearch<uint16_t, city_array.size()> es;
+		//		float distance = es.exec(city_array, 2U);
 		fmt::print("Distance: {}\n", distance);
 	}
 
