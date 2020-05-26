@@ -3,7 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <array>
-#include <fmt/format.h>
+#include <fmt/format.hpp>
 
 #if 0
 #define FILE "test.txt"

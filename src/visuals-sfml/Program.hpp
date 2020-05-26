@@ -3,7 +3,7 @@
 #include "City.hpp"
 
 #include <SFML/Graphics.hpp>
-#include <fmt/format.h>
+#include <fmt/format.hpp>
 #include <vector>
 
 class Program final

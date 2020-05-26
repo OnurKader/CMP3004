@@ -1,11 +1,11 @@
 #pragma once
 
 #include "City.hpp"
-#include "ConstexprUtils.hpp"
-#include "RuntimeUtils.hpp"
+#include "Utilities.hpp"
 
 #include <array>
 #include <cfloat>
+#include <fmt/format.hpp>
 #include <numeric>
 
 // Inheritance with a base class of Algorithm which holds the arrays and the distance, also the exec
@@ -13,7 +13,7 @@
 template<typename T, size_t S>
 class NearestNeighbour final
 {
-	public:
+public:
 	NearestNeighbour() { std::iota(m_index_array.begin(), m_index_array.end(), T {}); }
 
 	float exec(std::array<City, S>& city_array, const uint8_t log_level = 0U)
@@ -32,19 +32,21 @@ class NearestNeighbour final
 			{
 				case 0U: break;
 				default:
-					std::cout << index_to_query << ": (" << city_array[index_to_query].x << ", "
-							  << city_array[index_to_query].y << ")\n";
+					fmt::print("{}: ({}, {})\n",
+							   index_to_query,
+							   city_array[index_to_query].x,
+							   city_array[index_to_query].y);
 			}
 		}
 
 		// Everything is visited, time to end and return the distance of the array, the final
 		// connection is done in the getTot... func call
-		rt::printArray(m_index_array);
+		fmt::print("{}\n", m_index_array);
 
 		return getTotalDistanceOfCities(city_array, m_index_array);
 	}
 
-	private:
+private:
 	std::array<T, S> m_index_array;
 
 	// Utility function that traverses through all the cities and finds the smallest distance from
@@ -65,7 +67,7 @@ class NearestNeighbour final
 				const float distance = city_array[queried_index].dist(current_city);
 				if(distance < record_distance)
 				{
-					closest_index = i;
+					closest_index = static_cast<uint16_t>(i);
 					record_distance = distance;
 				}
 			}
