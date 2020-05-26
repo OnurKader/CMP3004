@@ -6,6 +6,9 @@
 - ~~Have a macro for enabling/disabling drawing using SFML -DDRAW -DVISUAL
 something like that~~
 - ~~Add a test case (?) a smaller file with fewer points~~ and a known path
+- Change everything from iostream to libfmt
+- Move Runtime and Constexpr utils to a single file
+
 
 ___
 
