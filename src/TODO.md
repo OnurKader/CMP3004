@@ -3,12 +3,10 @@
 ## Design
 
 - ~~Draw the US Map and plot the nodes on it~~
-- ~~Have a macro for enabling/disabling drawing using SFML -DDRAW -DVISUAL
-something like that~~
-- ~~Add a test case (?) a smaller file with fewer points~~ and a known path
-- Change everything from iostream to libfmt
-- Move Runtime and Constexpr utils to a single file
-
+- ~~Add a test case (?) a smaller file with fewer points~~
+- ~~I messed up the drawing, the y axis is flipped~~
+- ~~Change everything from iostream to libfmt~~
+- ~~Move Runtime and Constexpr utils to a single file~~
 
 ___
 

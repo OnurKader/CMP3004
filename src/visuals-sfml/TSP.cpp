@@ -42,12 +42,15 @@ int main()
 							 45, 32, 14, 11, 10, 22, 13, 24, 12, 20, 46, 19, 39, 2,	 21, 15,
 							 40, 33, 28, 4,	 47, 38, 31, 23, 9,	 41, 25, 3,	 34, 44, 1,	 7})
 		{
-			program.vertexArray()[count].position = program.cities()[i].windowPosition();
+			program.vertexArray()[count].position.x = program.cities()[i].windowPosition().x;
+			program.vertexArray()[count].position.y =
+				program.window().getSize().y - program.cities()[i].windowPosition().y;
 			const auto grey = greyscale_table[i];
 			program.vertexArray()[count++].color = sf::Color(128U - grey, grey, 255U - grey);
 		}
 		auto& last = program.vertexArray()[program.vertexArray().getVertexCount() - 1ULL];
-		last.position = program.cities()[0].windowPosition();
+		last.position.x = program.cities()[0].windowPosition().x;
+		last.position.y = program.window().getSize().y - program.cities()[0].windowPosition().y;
 		auto grey = greyscale_table[9U * 4U + 1U];
 		last.color = sf::Color(128U - grey, grey, 255U - grey);
 
