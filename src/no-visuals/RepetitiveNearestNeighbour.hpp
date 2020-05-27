@@ -21,6 +21,7 @@ public:
 		m_current_repetition_count(0ULL)
 	{
 		resetArrayToCurrentRepetition();
+		++m_current_repetition_count;
 	};
 
 	std::pair<float, std::array<T, S>> exec(std::array<City, S>& city_arr)
@@ -36,7 +37,12 @@ public:
 				m_shortest_path_yet = m_array;
 			}
 
+			fmt::print("exec::for i={}, arr={}\n", i, m_array);
+			fmt::print("exec::for i={}, spy={}\n\n", i, m_shortest_path_yet);
+
 			resetVisitedStateForAllCities(city_arr);
+			resetArrayToCurrentRepetition();
+			++m_current_repetition_count;
 		}
 
 		return std::make_pair(m_shortest_distance_yet, m_shortest_path_yet);
@@ -52,11 +58,11 @@ private:
 
 	void resetArrayToCurrentRepetition()
 	{
-		if(m_current_repetition_count >= m_repetition_count)
-			return;
-
-		std::generate(m_array.begin(), m_array.end(), [&]() mutable {
-			return (m_current_repetition_count++ % S);
+		//		static size_t temp = -1;
+		std::generate(m_array.begin(), m_array.end(), [&, n = 0U]() mutable {
+			fmt::print("In generate, n={}\n", n);
+			fmt::print("In generate, array={}\n", m_array);
+			return ((m_current_repetition_count + n++) % S);
 		});
 	}
 

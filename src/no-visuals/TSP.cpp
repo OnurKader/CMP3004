@@ -18,6 +18,7 @@ int main()
 		RepetitiveNearestNeighbour<uint16_t, city_array.size()> rnn(city_array.size());
 		const auto& [distance, shortest_path] = rnn.exec(city_array);
 		fmt::print("Distance: {}\nArray: {}\n", distance, shortest_path);
+		fmt::print("array.size():{}\n", shortest_path.size());
 	}
 
 	return 0;
