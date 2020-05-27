@@ -22,7 +22,7 @@ struct City final
 	bool visited;
 };
 
-[[maybe_unused]] static std::array cities{
+[[maybe_unused]] static std::array cities {
 	City(6734, 1453), City(2233, 10),	City(5530, 1424), City(401, 841),	City(3082, 1644),
 	City(7608, 4458), City(7573, 3716), City(7265, 1268), City(6898, 1885), City(1112, 2049),
 	City(5468, 2606), City(5989, 2873), City(4706, 2674), City(4612, 2035), City(6347, 2683),
@@ -34,19 +34,19 @@ struct City final
 	City(4985, 140),  City(1916, 1569), City(7280, 4899), City(7509, 3239), City(10, 2676),
 	City(6807, 2993), City(5185, 3258), City(3023, 1942)};
 
-[[maybe_unused]] static std::array test_cities{City(56, 220),
-											   City(700, 1003),
-											   City(3520, 17),
-											   City(455, 3206),
-											   City(5879, 6238),
-											   City(121, 617),
-											   City(99, 2000),
-											   City(4621, 3023)};
+[[maybe_unused]] static std::array test_cities {City(56, 220),
+												City(700, 1003),
+												City(3520, 17),
+												City(455, 3206),
+												City(5879, 6238),
+												City(121, 617),
+												City(99, 2000),
+												City(4621, 3023)};
 
-constexpr static std::array shortest_path_for_48{1,	 8,	 38, 31, 44, 18, 7,	 28, 6,	 37, 19, 27, 17,
-												 43, 30, 36, 46, 33, 20, 47, 21, 32, 39, 48, 5,	 42,
-												 24, 10, 45, 35, 4,	 26, 2,	 29, 34, 41, 16, 22, 3,
-												 23, 14, 25, 13, 11, 12, 15, 40, 9,	 1};
+[[maybe_unused]] constexpr static std::array shortest_path_for_48 {
+	1,	8,	38, 31, 44, 18, 7,	28, 6,	37, 19, 27, 17, 43, 30, 36, 46,
+	33, 20, 47, 21, 32, 39, 48, 5,	42, 24, 10, 45, 35, 4,	26, 2,	29,
+	34, 41, 16, 22, 3,	23, 14, 25, 13, 11, 12, 15, 40, 9,	1};
 
 template<size_t S>
 constexpr float getTotalDistanceOfCities(const std::array<City, S>& city_arr,
@@ -64,4 +64,19 @@ constexpr float getTotalDistanceOfCities(const std::array<City, S>& city_arr,
 	result += city_arr[index_array.front()].dist(city_arr[index_array.back()]);
 
 	return result;
+}
+
+template<size_t S>
+constexpr void resetVisitedStateForAllCities(std::array<City, S>& city_arr) noexcept
+{
+	std::for_each(city_arr.begin(), city_arr.end(), [](City& city) { city.visited = false; });
+}
+
+template<size_t S>
+constexpr bool allCitiesVisited(const std::array<City, S>& city_arr) noexcept
+{
+	return std::all_of(
+		city_arr.cbegin(), city_arr.cend(), [](const auto& elem) constexpr {
+			return elem.visited;
+		});
 }
