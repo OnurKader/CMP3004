@@ -31,6 +31,8 @@ _**TODO**_
 
 ![Nearest Neighbour 48](img/48-nn.png "48 City NN")
 
+![Nearest Neighbour 48 Reversed (Current)](img/48-nn-reversed.png "48 City Reversed image NN")
+
 ## Usage
 
 _**TODO**_
