@@ -1,4 +1,4 @@
-CXX := g++-10
+CXX := g++
 CXX_FLAGS := -Wall -Wextra -O3 -flto -std=c++2a -Wall -Wextra -Wformat-overflow=2 -Wpedantic -Wshadow -Wmissing-include-dirs -Wuninitialized -Wduplicated-branches -Wduplicated-cond -Wfloat-equal -Wconversion -Wcast-qual -Wmissing-declarations
 CXX_LIBS :=
 

@@ -1,7 +1,5 @@
 #pragma once
 
-#include "City.hpp"
-
 #include <algorithm>
 #include <array>
 #include <chrono>
