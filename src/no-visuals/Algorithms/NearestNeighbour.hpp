@@ -3,6 +3,7 @@
 #include "City.hpp"
 #include "Utilities.hpp"
 
+#include <algorithm>
 #include <array>
 #include <cfloat>
 #include <fmt/format.hpp>
@@ -13,78 +14,13 @@ template<typename T, size_t S>
 class NearestNeighbour final
 {
 public:
-	NearestNeighbour() { std::iota(m_array.begin(), m_array.end(), T {}); }
+	NearestNeighbour() {}
 
 	std::pair<float, std::array<T, S>> exec(std::array<City, S>& city_array,
 											const uint8_t log_level = 0U)
 	{
-		T index_to_query = 0U;
-		size_t array_index_to_store_closest_city = 1ULL;
-		while(!std::all_of(
-			city_array.cbegin(), city_array.cend(), [](const auto& elem) { return elem.visited; }))
-		{
-			index_to_query = findNearestCity(city_array, index_to_query);
-
-			// Store the next city's index in the array
-			m_array[array_index_to_store_closest_city++] = index_to_query;
-
-			switch(log_level)
-			{
-				case 0U: break;
-				default:
-					fmt::print("{}: ({}, {})\n",
-							   index_to_query,
-							   city_array[index_to_query].x,
-							   city_array[index_to_query].y);
-			}
-		}
-
-		// Everything is visited, time to end and return the distance of the array, the final
-		// connection is done in the getTot... func call
-		if(log_level)
-			fmt::print("{}\n", m_array);
-		std::ofstream nn_out("nn_output.txt");
-		if(nn_out)
-			fmt::print(nn_out, "{}\n", m_array);
-
-		return std::make_pair(getTotalDistanceOfCities(city_array, m_array), m_array);
 	}
 
 private:
 	std::array<T, S> m_array;
-
-	// Utility function that traverses through all the cities and finds the smallest distance from
-	// the current one and marks it as visited at the end, maybe mark our city as visited as well
-
-	// Should this just return the index, or maybe the index + distance in an std::pair
-	// No real reason to get the city, we just hold the indices for the edges
-	T findNearestCity(std::array<City, S>& city_array, const T queried_index) const
-	{
-		T closest_index = queried_index;
-		float record_distance = FLT_MAX;
-
-		for(size_t i = 0ULL; i < city_array.size(); ++i)
-		{
-			auto& current_city = city_array[i];
-			if(!current_city.visited && queried_index != i)
-			{
-				const float distance = city_array[queried_index].dist(current_city);
-				if(distance < record_distance)
-				{
-					closest_index = static_cast<T>(i);
-					record_distance = distance;
-				}
-			}
-		}
-
-		// Set the city we gave and the closest one to it as visited, I'm not checking to see if the
-		// city passed to this function is visited or not so it's safe to mark the closest as
-		// visited, it can find a non-visited city for itself, and if it can't find one, that means
-		// that the whole array has been visited and it's time to connect the last city with the
-		// first one to complete our cycle.
-		city_array[queried_index].visited = true;
-		city_array[closest_index].visited = true;
-
-		return closest_index;
-	}
 };
