@@ -1,6 +1,7 @@
 #include "ExhaustiveSearch.hpp"
 #include "NearestNeighbour.hpp"
 #include "RepetitiveNearestNeighbour.hpp"
+#include "Utilities.hpp"
 
 #include <fmt/format.hpp>
 
