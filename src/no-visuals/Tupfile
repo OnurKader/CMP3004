@@ -1,7 +1,7 @@
 include_rules
 
 EXE := TSP_File
-CXX_LIBS += -lfmt
+CXX_LIBS += -lfmt -lpthread
 CXX_FLAGS += -IAlgorithms -I.
 
 : foreach *.cpp | *.hpp |> !cxx |> {objs}

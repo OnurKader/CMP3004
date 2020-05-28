@@ -148,6 +148,11 @@ bool Program::run()
 		m_window.draw(city);
 	}
 
+	auto circle = sf::CircleShape(10);
+	circle.setFillColor(sf::Color::Red);
+	circle.setPosition(m_vertex_array[m_vertex_array.getVertexCount() - 1ULL].position);
+	m_window.draw(circle);
+
 	m_window.display();
 	return true;
 }
