@@ -58,12 +58,12 @@ private:
 
 	void resetArrayToCurrentRepetition()
 	{
-		//		static size_t temp = -1;
 		std::generate(m_array.begin(), m_array.end(), [&, n = 0U]() mutable {
-			fmt::print("In generate, n={}\n", n);
-			fmt::print("In generate, array={}\n", m_array);
 			return ((m_current_repetition_count + n++) % S);
 		});
+
+		// Hack to fix generate ?????
+		m_array.back() = (m_array[m_array.size() - 2ULL] + 1ULL) % S;
 	}
 
 	T findNearestCity(std::array<City, S>& city_array, const T queried_index) const
@@ -97,6 +97,7 @@ private:
 		size_t array_index_to_store_closest_city = 1ULL;
 		while(!allCitiesVisited(city_array))
 		{
+			fmt::print("arr_index_closest={}\n", array_index_to_store_closest_city);
 			index_to_query = findNearestCity(city_array, index_to_query);
 			m_array[array_index_to_store_closest_city++] = index_to_query;
 		}
