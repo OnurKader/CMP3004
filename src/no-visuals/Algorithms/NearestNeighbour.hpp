@@ -46,6 +46,13 @@ public:
 			fmt::print("m_index_array: {}\n", m_index_array);
 
 		const float distance_of_nn_path = getTotalDistanceOfCities(city_array, m_index_array);
+
+		std::ofstream out_file("nn_output.txt");
+		if(out_file)
+		{
+			fmt::print("{}\nDistance: {}\n", m_index_array, distance_of_nn_path);
+		}
+
 		return std::make_pair(distance_of_nn_path, m_index_array);
 	}
 
