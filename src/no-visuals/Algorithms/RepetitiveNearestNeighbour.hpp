@@ -24,7 +24,8 @@ public:
 		++m_current_repetition_count;
 	};
 
-	std::pair<float, std::array<T, S>> exec(std::array<City, S>& city_arr)
+	std::pair<float, std::array<T, S>> exec(std::array<City, S>& city_arr,
+											const uint8_t log_leve = 0U)
 	{
 		for(size_t i = 0ULL; i < m_repetition_count; ++i)
 		{
@@ -37,8 +38,11 @@ public:
 				m_shortest_path_yet = m_array;
 			}
 
-			fmt::print("exec::for i={}, arr={}\n", i, m_array);
-			fmt::print("exec::for i={}, spy={}\n\n", i, m_shortest_path_yet);
+			if(log_leve)
+			{
+				fmt::print("exec::for i={}, arr={}\n", i, m_array);
+				fmt::print("exec::for i={}, spy={}\n\n", i, m_shortest_path_yet);
+			}
 
 			resetVisitedStateForAllCities(city_arr);
 			resetArrayToCurrentRepetition();
@@ -94,12 +98,16 @@ private:
 	void nearestNeighbour(std::array<City, S>& city_array)
 	{
 		T index_to_query = 0U;
-		size_t array_index_to_store_closest_city = 1ULL;
+		size_t array_index_to_store_closest_city = 0ULL;
+		fmt::print("\n");
 		while(!allCitiesVisited(city_array))
 		{
-			fmt::print("arr_index_closest={}\n", array_index_to_store_closest_city);
 			index_to_query = findNearestCity(city_array, index_to_query);
-			m_array[array_index_to_store_closest_city++] = index_to_query;
+			if(index_to_query == 0U)
+				break;
+			fmt::print("RNN::nn() i_t_q: {}\n", index_to_query);
+			m_array[++array_index_to_store_closest_city] = index_to_query;
 		}
+		fmt::print("\n");
 	}
 };
