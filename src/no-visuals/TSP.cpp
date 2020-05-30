@@ -13,8 +13,8 @@ int main()
 	{
 		rt::Timer t_algo("Repetitive Nearest Neighbour");
 
-		RepetitiveNearestNeighbour<uint16_t, city_array.size()> nn(48U);
-		const auto& [distance, shortest_path] = nn.exec(city_array);
+		RepetitiveNearestNeighbour<uint16_t, city_array.size()> nn;
+		const auto& [distance, shortest_path] = nn.exec(city_array, 47ULL, 0U);
 		fmt::print("Distance: {}\nArray: {}\n", distance, shortest_path);
 	}
 
