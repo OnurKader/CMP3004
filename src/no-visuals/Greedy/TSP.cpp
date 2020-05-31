@@ -1,89 +1,83 @@
-#include "TSP.hpp"
+#include "Greedy.hpp"
 
-template<size_t S>
-std::array<size_t, S> greedy_algo(uint16_t** distance)
+#include <fmt/format.hpp>
+
+ofstream output_sol, output_trace;
+
+int main(int argc, char* argv[])
 {
-	size_t max = 0ULL;
-	size_t i, j;
-	std::array<bool, S> visited {true};
-	std::array<size_t, S> path;
-	std::array<uint16_t, S> minimum;
-	std::array<uint16_t, S> min_index;
-	size_t index;
-	uint16_t min;
-	size_t sum;
-	size_t path_len, max_index;
+	string Methods[] = {"Greedy"};
 
-	max = distance[0][1];
-	for(i = 2; i < S; i++)
+	int** distance;
+	int* d = new int;
+	int* o = new int;
+	distance = readgraph(argv[1], d, o);
+	cout << "NAME" << NAME << endl;
+	int dim = *d;
+	int opt = *o;
+	double cutoff = strtod(argv[2], NULL);
+	int seed = atoi(argv[4]);
+
+	int i;
+	int pathlength = 0;
+	double gap;
+
+	if(Method[0])
 	{
-		if(max < distance[0][i])
-		{
-			max = distance[0][i];
-			index = i;
-		}
-	}
+		cout << "Method:"
+			 << "Greedy" << endl;
+		int* path;
+		path = greedy_algo(distance, dim);
 
-	visited[index] = true;
-	path[0] = 0;
-	path[1] = index;
-	path_len = 2;
-	while(path_len < S)
+		cout << "Path:";
+
+		for(i = 0; i < dim - 1; i++)
+			pathlength += distance[path[i]][path[i + 1]];
+		pathlength += distance[path[dim - 1]][path[0]];
+		output_sol << pathlength << endl;
+		for(i = 0; i < dim - 1; i++)
+		{
+			cout << path[i] + 1 << ",";
+			output_sol << path[i] + 1 << ",";
+		}
+		cout << path[dim - 1] + 1 << "," << path[0] + 1 << endl;
+		output_sol << path[dim - 1] + 1 << "," << path[0] + 1 << endl;
+
+		cout << "Path Length:";
+		cout << pathlength << endl;
+		return 0;
+	}
+	int* min;
+	if(solution->time < cutoff)
 	{
-		for(i = 0; i < S; i++)
+		cout << "Optimal solution found:" << endl;
+		cout << "Total cost:" << solution->value << endl;
+		cout << "Optimal cycle:";
+		for(vector<int>::const_iterator it = solution->path->begin(); it != solution->path->end();
+			it++)
 		{
-			if(!visited[i])
-			{
-				min = distance[path[0]][i] + distance[path[1]][i] - distance[path[0]][path[1]];
-				index = 0;
-				for(j = 1; j < path_len - 1; j++)
-				{
-					sum = distance[path[j]][i] + distance[path[j + 1]][i] -
-						  distance[path[j]][path[j + 1]];
-					if(sum < min)
-					{
-						min = sum;
-						index = j;
-					}
-				}
-
-				sum = distance[path[path_len - 1]][i] + distance[path[0]][i] -
-					  distance[path[path_len - 1]][path[0]];
-				if(sum < min)
-				{
-					min = sum;
-					index = path_len - 1;
-				}
-				minimum[i] = min;
-				min_index[i] = index;
-			}
-			else
-			{
-				minimum[i] = INT_MIN;
-				min_index[i] = INT_MIN;
-			}
+			cout << *it + 1 << ",";
+			output_sol << *it + 1 << ",";
 		}
-
-		max = minimum[0];
-		max_index = 0;
-
-		for(i = 1; i < S; i++)
-		{
-			if(minimum[i] > max)
-			{
-				max = minimum[i];
-				max_index = i;
-			}
-		}
-
-		for(i = path_len - 1; i >= (min_index[max_index] + 1); i--)
-		{
-			path[i + 1] = path[i];
-		}
-		path[i + 1] = max_index;
-		visited[max_index] = true;
-		++path_len;
+		cout << source + 1 << endl;
+		output_sol << source + 1 << endl;
+		cout << "Elapsed time:" << solution->time << "s" << endl;
 	}
-
-	return path;
+	else
+	{
+		cout << "Total cost:" << solution->value << endl;
+		gap = (float)(solution->value - opt) / opt;
+		cout << "Solution cycle:";
+		for(vector<int>::const_iterator it = solution->path->begin(); it != solution->path->end();
+			it++)
+		{
+			cout << *it + 1 << ",";
+			output_sol << *it + 1 << ",";
+		}
+		cout << source + 1 << endl;
+		output_sol << source + 1 << endl;
+		cout << "Elapsed time:" << solution->time << "s" << endl;
+	}
+	return 0;
+}
 }
