@@ -2,17 +2,16 @@
 
 #include <fmt/format.hpp>
 
-ofstream output_sol, output_trace;
+std::ofstream output_sol, output_trace;
 
-int main(int argc, char* argv[])
+int main()
 {
-	string Methods[] = {"Greedy"};
+	std::string Methods[] = {"Greedy"};
 
 	int** distance;
 	int* d = new int;
 	int* o = new int;
 	distance = readgraph(argv[1], d, o);
-	cout << "NAME" << NAME << endl;
 	int dim = *d;
 	int opt = *o;
 	double cutoff = strtod(argv[2], NULL);
@@ -22,7 +21,7 @@ int main(int argc, char* argv[])
 	int pathlength = 0;
 	double gap;
 
-	if(Method[0])
+	if(Methods[0])
 	{
 		cout << "Method:"
 			 << "Greedy" << endl;
@@ -53,14 +52,11 @@ int main(int argc, char* argv[])
 		cout << "Optimal solution found:" << endl;
 		cout << "Total cost:" << solution->value << endl;
 		cout << "Optimal cycle:";
-		for(vector<int>::const_iterator it = solution->path->begin(); it != solution->path->end();
-			it++)
+		for(const auto& sol: solution)
 		{
-			cout << *it + 1 << ",";
-			output_sol << *it + 1 << ",";
+			fmt::print("{}, ", sol + 1);
 		}
 		cout << source + 1 << endl;
-		output_sol << source + 1 << endl;
 		cout << "Elapsed time:" << solution->time << "s" << endl;
 	}
 	else
@@ -72,12 +68,10 @@ int main(int argc, char* argv[])
 			it++)
 		{
 			cout << *it + 1 << ",";
-			output_sol << *it + 1 << ",";
 		}
 		cout << source + 1 << endl;
 		output_sol << source + 1 << endl;
 		cout << "Elapsed time:" << solution->time << "s" << endl;
 	}
 	return 0;
-}
 }
