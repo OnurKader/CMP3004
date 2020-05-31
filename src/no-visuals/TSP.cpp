@@ -12,10 +12,10 @@ int main()
 	rt::Timer t_main("Main");
 
 	{
-		rt::Timer t_algo("Repetitive Nearest Neighbour");
+		rt::Timer t_algo("Genetic Algorithm");
 
-		Genetic gen;
-		const auto& [distance, shortest_path] = gen.exec(city_array, 47ULL, 0U);
+		Genetic<uint16_t, city_array.size()> gen;
+		const auto& [distance, shortest_path] = gen.exec(city_array, 1U);
 		fmt::print("Distance: {}\nArray: {}\n", distance, shortest_path);
 	}
 
