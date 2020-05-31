@@ -7,6 +7,7 @@
 #include <array>
 #include <numeric>
 #include <random>
+#include <type_traits>
 
 static std::random_device s_random_device {};
 static std::default_random_engine s_def_random_engine {s_random_device()};
@@ -18,8 +19,11 @@ bool isUnique(std::array<T, S> unsorted_array)
 	return std::adjacent_find(unsorted_array.begin(), unsorted_array.end()) == unsorted_array.end();
 }
 
+// Maybe I should do SFINAE
 template<typename T>
-requires(std::is_floating_point_v<T>) T randomFromRange(const T min, const T max)
+T randomFromRange(const T min,
+				  const T max) requires std::is_floating_point_v<T>	   // Qt Creator cannot
+																	   // understand concepts yet
 {
 	static std::uniform_real_distribution<float> uniform_dist(min, max);
 	return uniform_dist(s_def_random_engine);
