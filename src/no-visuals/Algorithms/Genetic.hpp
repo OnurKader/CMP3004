@@ -18,6 +18,7 @@ public:
 	std::pair<float, std::array<T, S>> exec(std::array<City, S>& city_array,
 											const uint8_t log_level = 0U)
 	{
+		return {};
 	}
 
 private:

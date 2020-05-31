@@ -18,6 +18,13 @@ bool isUnique(std::array<T, S> unsorted_array)
 	return std::adjacent_find(unsorted_array.begin(), unsorted_array.end()) == unsorted_array.end();
 }
 
+template<typename T>
+requires(std::is_floating_point_v<T>) T randomFromRange(const T min, const T max)
+{
+	static std::uniform_real_distribution<float> uniform_dist(min, max);
+	return uniform_dist(s_def_random_engine);
+}
+
 template<typename T, size_t S>
 class DNA final
 {
@@ -71,16 +78,18 @@ public:
 		return child_dna;
 	}
 
-	bool mutate(const float mutation_chance) noexcept
+	void mutate(const float mutation_chance) noexcept
 	{
-		const std::uniform_int_distribution<float> uniform_dist(0.f, 1.f);
-		std::for_each(m_genes.begin(), m_genes.end(), [mutation_chance](T& gene_ref) {
-			if(uniform_dist(s_def_random_engine) < mutation_chance)
+		for(size_t i = 0ULL; i < S; ++i)
+		{
+			if(randomFromRange(0.f, 1.f) < mutation_chance)
 			{
 				// TODO: Decide what to do here
 				const size_t random_index = 1;
+				const size_t next_index = (random_index) % S;
+				std::swap(m_genes.begin() + random_index, m_genes.begin() + next_index);
 			}
-		});
+		}
 	}
 
 private:
