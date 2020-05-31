@@ -1,348 +1,270 @@
-#include <iostream>
-#include <vector>
-#include <math.h>
 #include <algorithm>
+#include <cmath>
+#include <fmt/format.hpp>
+#include <vector>
 
-using namespace std;
-
-
-
-
-struct city {
-  int x;
-  int y;
-
-  city(int a, int b) {
-    x = a;
-    y = b;
-  }
-
-
+struct City
+{
+	int x;
+	int y;
 };
 
+float totalDistanceX(std::vector<City> route, size_t size)
+{
+	float sum = 0.f;
+	for(size_t x = 0; x < size - 1; ++x)
+	{
+		sum += std::sqrt(std::pow(route[x + 1].x - route[x].x, 2) +
+						 std::pow(route[x + 1].y - route[x].y, 2));
+	}
 
-
-float totalDistanceX(vector<city> route, int size) {
-  float sum = 0;
-  for(int x = 0; x < size - 1; x++) {
-
-
-    sum += sqrt(pow(route[x + 1].x-route[x].x, 2) + pow(route[x + 1].y-route[x].y, 2));
-  }
-
-
-  return sum;
+	return sum;
 }
 
-
-void printCountryx(vector<city> route, int size ) {
-  for(int s = 0; s < size; s++) {
-
-      cout << "\n" <<  "Route " << s + 1 << " -> x: " << route[s].x << " y: " << route[s].y << "\n";
-
-  }
+void printCountryX(std::vector<City> route, size_t size)
+{
+	for(size_t s = 0; s < size; ++s)
+	{
+		cout << "\n"
+			 << "Route " << s + 1 << " -> x: " << route[s].x << " y: " << route[s].y << "\n";
+	}
 }
 
-
-void changeRouteX(vector<city> &route, int indexf, int indexs) {
-
-  city temp = city(0, 0);
-  temp = route[indexf];
-  route.at(indexf) = route[indexs];
-  route.at(indexs) = temp;
-
+void changeRouteX(vector<City>& route, int indexf, int indexs)
+{
+	City temp = City(0, 0);
+	temp = route[indexf];
+	route.at(indexf) = route[indexs];
+	route.at(indexs) = temp;
 }
 
+vector<City> shortestForThreeX(vector<City> route)
+{
+	vector<City> rCity;
+	rCity = route;
 
+	float record = totalDistanceX(route, route.size());
+	changeRouteX(route, 1, 2);
 
-vector<city> shortestForThreeX(vector<city> route) {
+	if(totalDistanceX(route, 3) < record)
+	{
+		rCity = route;
 
+		record = totalDistanceX(route, 3);
+	}
+	changeRouteX(route, 0, 1);
+	changeRouteX(route, 0, 2);
 
+	if(totalDistanceX(route, 3) < record)
+	{
+		rCity = route;
 
+		record = totalDistanceX(route, 3);
+	}
 
-
-  vector<city> rCity;
-  rCity = route;
-
-
-
-
-
-  float record = totalDistanceX(route, route.size());
-  changeRouteX(route, 1, 2);
-
-  if(totalDistanceX(route, 3) < record) {
-
-    rCity = route;
-
-    record = totalDistanceX(route, 3);
-  }
-  changeRouteX(route, 0, 1);
-  changeRouteX(route, 0, 2);
-
-  if(totalDistanceX(route, 3) < record) {
-
-    rCity = route;
-
-    record = totalDistanceX(route, 3);
-  }
-
- return rCity;
-
-
-
-
-
+	return rCity;
 }
 
-vector<vector<city> > possibleRoutes(vector<city> country) {
-  vector<vector<city> > allPossibleRoutes;
-  vector<city> temp;
-  vector<city> a;
-  vector<city> b;
+vector<vector<City>> possibleRoutes(vector<City> country)
+{
+	vector<vector<City>> allPossibleRoutes;
+	vector<City> temp;
+	vector<City> a;
+	vector<City> b;
 
-  int len = country.size();
+	int len = country.size();
 
+	for(int s = 0; s < len; s++)
+	{
+		a = vector<City>(country.begin() + s, country.end());
+		b = vector<City>(country.begin(), country.begin() + s);
 
+		temp.reserve(a.size() + b.size());
 
-  for(int s = 0; s < len; s++){
+		temp = a;
+		temp.insert(temp.end(), b.begin(), b.end());
 
+		allPossibleRoutes.push_back(temp);
+	}
 
-    a = vector<city>(country.begin() + s, country.end());
-    b = vector<city>(country.begin(), country.begin() + s);
-
-
-
-    temp.reserve(a.size() + b.size());
-
-
-
-    temp = a;
-    temp.insert(temp.end(), b.begin(), b.end());
-
-
-    allPossibleRoutes.push_back(temp);
-  }
-
-  return allPossibleRoutes;
-
+	return allPossibleRoutes;
 }
 
-vector<city> combineTwoRoutes(vector<city> route1, vector<city> route2) {
-  vector<city> finalRoute;
-  finalRoute.reserve(route1.size() + route2.size());
-  finalRoute = route1;
-  finalRoute.insert(finalRoute.end(), route2.begin(), route2.end());
-  return finalRoute;
-
+vector<City> combineTwoRoutes(vector<City> route1, vector<City> route2)
+{
+	vector<City> finalRoute;
+	finalRoute.reserve(route1.size() + route2.size());
+	finalRoute = route1;
+	finalRoute.insert(finalRoute.end(), route2.begin(), route2.end());
+	return finalRoute;
 }
 
-vector<city> joinTwoRoutes(vector<city> route1, vector<city> route2) {
-  vector<city> combinedRoute;
-  vector<city> combinedRouteAlt;
-  vector<city> reversedRoute;
-  vector<city> routeToBeReturned;
-  vector<vector<city> > routesForFormer;
-  vector<vector<city> > routesForLatter;
+vector<City> joinTwoRoutes(vector<City> route1, vector<City> route2)
+{
+	vector<City> combinedRoute;
+	vector<City> combinedRouteAlt;
+	vector<City> reversedRoute;
+	vector<City> routeToBeReturned;
+	vector<vector<City>> routesForFormer;
+	vector<vector<City>> routesForLatter;
 
-  routeToBeReturned = combinedRoute;
+	routeToBeReturned = combinedRoute;
 
-  combinedRoute = combineTwoRoutes(route1, route2);
-  routeToBeReturned = combinedRoute;
+	combinedRoute = combineTwoRoutes(route1, route2);
+	routeToBeReturned = combinedRoute;
 
-  routesForFormer = possibleRoutes(route1);
-  routesForLatter = possibleRoutes(route2);
+	routesForFormer = possibleRoutes(route1);
+	routesForLatter = possibleRoutes(route2);
 
+	float shortestDistance = totalDistanceX(combinedRoute, combinedRoute.size());
+	for(int a = 0; a < route1.size(); a++)
+	{
+		for(int b = 0; b < route2.size(); b++)
+		{
+			combinedRoute = combineTwoRoutes(routesForFormer[a], routesForLatter[b]);
+			reversedRoute = vector<City>(routesForLatter[b].rbegin(), routesForLatter[b].rend());
+			combinedRouteAlt = combineTwoRoutes(routesForFormer[a], reversedRoute);
 
-  float shortestDistance = totalDistanceX(combinedRoute, combinedRoute.size());
-  for(int a = 0; a < route1.size(); a++) {
-    for(int b = 0; b < route2.size(); b++) {
+			if(totalDistanceX(combinedRouteAlt, combinedRouteAlt.size()) <
+			   totalDistanceX(combinedRoute, combinedRoute.size()))
+			{
+				combinedRoute = combinedRouteAlt;
+			}
 
-      combinedRoute = combineTwoRoutes(routesForFormer[a], routesForLatter[b]);
-      reversedRoute = vector<city>(routesForLatter[b].rbegin(), routesForLatter[b].rend());
-      combinedRouteAlt = combineTwoRoutes(routesForFormer[a], reversedRoute);
+			if(totalDistanceX(combinedRoute, combinedRoute.size()) < shortestDistance)
+			{
+				shortestDistance = totalDistanceX(combinedRoute, combinedRoute.size());
 
-      if(totalDistanceX(combinedRouteAlt, combinedRouteAlt.size()) < totalDistanceX(combinedRoute, combinedRoute.size())) {
-        combinedRoute = combinedRouteAlt;
-      }
+				routeToBeReturned = combinedRoute;
+			}
+		}
+	}
 
-
-
-
-      if(totalDistanceX(combinedRoute, combinedRoute.size()) < shortestDistance) {
-        shortestDistance = totalDistanceX(combinedRoute, combinedRoute.size());
-
-        routeToBeReturned = combinedRoute;
-      }
-
-
-    }
-
-  }
-
-
-  return routeToBeReturned;
-
-
-
-
-
-
-
+	return routeToBeReturned;
 }
 
-int extent(vector<int> nums) {
-  int min = *min_element(nums.begin(), nums.end());
-  int max = *max_element(nums.begin(), nums.end());
+int extent(vector<int> nums)
+{
+	int min = *min_element(nums.begin(), nums.end());
+	int max = *max_element(nums.begin(), nums.end());
 
-  return max - min;
-
+	return max - min;
 }
 
+vector<vector<City>> splitCities(vector<City> route)
+{
+	vector<int> xValues;
+	vector<int> yValues;
+	vector<City> sortedCity;
+	vector<City> firstHalf;
+	vector<City> secondHalf;
+	vector<vector<City>> twoSplitCities;
 
-vector<vector<city> > splitCities(vector<city> route) {
+	int len = route.size();
+	int smallestX = route[0].x;
+	int smallestY = route[0].y;
+	int indexOfSmallest;
 
-  vector<int> xValues;
-  vector<int> yValues;
-  vector<city> sortedCity;
-  vector<city> firstHalf;
-  vector<city> secondHalf;
-  vector<vector<city> > twoSplitCities;
+	for(int s = 0; s < route.size(); s++)
+	{
+		xValues.push_back(route[s].x);
+		yValues.push_back(route[s].y);
+	}
+	if(extent(xValues) > extent(yValues))
+	{
+		for(int s = 0; s < len; s++)
+		{
+			for(int d = 0; d < route.size(); d++)
+			{
+				if(route.size() == 1)
+				{
+					indexOfSmallest = d;
+				}
+				else if(route[d].x <= smallestX)
+				{
+					indexOfSmallest = d;
+					smallestX = route[d].x;
+				}
+			}
 
-  int len = route.size();
-  int smallestX = route[0].x;
-  int smallestY = route[0].y;
-  int indexOfSmallest;
+			sortedCity.push_back(route[indexOfSmallest]);
+			route.erase(route.begin() + indexOfSmallest);
+			smallestX = route[0].x;
+		}
+	}
+	else
+	{
+		for(int s = 0; s < len; s++)
+		{
+			for(int d = 0; d < route.size(); d++)
+			{
+				if(route.size() == 1)
+				{
+					indexOfSmallest = d;
+				}
+				else if(route[d].y <= smallestY)
+				{
+					indexOfSmallest = d;
+					smallestY = route[d].y;
+				}
+			}
+			sortedCity.push_back(route[indexOfSmallest]);
+			route.erase(route.begin() + indexOfSmallest);
+			smallestY = route[0].y;
+		}
+	}
 
-  for(int s = 0; s < route.size(); s++) {
-    xValues.push_back(route[s].x);
-    yValues.push_back(route[s].y);
+	firstHalf = vector<City>(sortedCity.begin(), sortedCity.end() - (sortedCity.size() / 2));
+	secondHalf = vector<City>(sortedCity.begin() + (sortedCity.size() / 2), sortedCity.end());
 
-  }
-if(extent(xValues) > extent(yValues)) {
-  for(int s = 0; s < len; s++) {
-    for(int d = 0; d < route.size(); d++) {
+	twoSplitCities.push_back(firstHalf);
+	twoSplitCities.push_back(secondHalf);
 
-      if(route.size() == 1) {
-        indexOfSmallest = d;
-      }
-      else if(route[d].x <= smallestX) {
-        indexOfSmallest = d;
-        smallestX = route[d].x;
-      }
-    }
-
-    sortedCity.push_back(route[indexOfSmallest]);
-    route.erase(route.begin() +indexOfSmallest);
-    smallestX = route[0].x;
-  }
-} else {
-  for(int s = 0; s < len; s++) {
-    for(int d = 0; d < route.size(); d++) {
-      if(route.size() == 1) {
-        indexOfSmallest = d;
-      }
-      else if(route[d].y <= smallestY) {
-        indexOfSmallest = d;
-        smallestY = route[d].y;
-      }
-    }
-    sortedCity.push_back(route[indexOfSmallest]);
-    route.erase(route.begin() +indexOfSmallest);
-    smallestY = route[0].y;
-  }
+	return twoSplitCities;
 }
 
+vector<City> divideAndConquer(vector<City> country, int n)
+{
+	if(country.size() <= n)
+	{
+		return shortestForThreeX(country);
+	}
+	else
+	{
+		vector<vector<City>> twoHalves = splitCities(country);
 
+		vector<City> half1 = twoHalves.front();
+		vector<City> half2 = twoHalves.back();
 
-firstHalf = vector<city>(sortedCity.begin(), sortedCity.end() - (sortedCity.size() / 2));
-secondHalf = vector<city>(sortedCity.begin() + (sortedCity.size() / 2), sortedCity.end());
-
-twoSplitCities.push_back(firstHalf);
-twoSplitCities.push_back(secondHalf);
-
-
-return twoSplitCities;
-
-
-
-
-
-
-
-
-
-
+		return joinTwoRoutes(divideAndConquer(half1, n), divideAndConquer(half2, n));
+	}
 }
 
+int main()
+{
+	City project[48] = {
+		City(6734, 1453), City(2233, 10),	City(5530, 1424), City(401, 841),	City(3082, 1644),
+		City(7608, 4458), City(7573, 3716), City(7265, 1268), City(6898, 1885), City(1112, 2049),
+		City(5468, 2606), City(5989, 2873), City(4706, 2674), City(4612, 2035), City(6347, 2683),
+		City(6107, 669),  City(7611, 5184), City(7462, 3590), City(7732, 4723), City(5900, 3561),
+		City(4483, 3369), City(6101, 1110), City(5199, 2182), City(1633, 2809), City(4307, 2322),
+		City(675, 1006),  City(7555, 4819), City(7541, 3981), City(3177, 756),	City(7352, 4506),
+		City(7545, 2801), City(3245, 3305), City(6426, 3173), City(4608, 1198), City(23, 2216),
+		City(7248, 3779), City(7762, 4595), City(7392, 2244), City(3484, 2829), City(6271, 2135),
+		City(4985, 140),  City(1916, 1569), City(7280, 4899), City(7509, 3239), City(10, 2676),
+		City(6807, 2993), City(5185, 3258), City(3023, 1942)};
 
-vector<city> divideAndConquer(vector<city> country, int n) {
-  if(country.size() <= n) {
+	vector<City> conversion;
 
-    return shortestForThreeX(country);
-  } else {
+	for(int x = 0; x < 48; x++)
+	{
+		conversion.push_back(project[x]);
+	}
 
-    vector<vector<city> > twoHalves = splitCities(country);
+	vector<City> citiesPro;
+	citiesPro = divideAndConquer(conversion, 3);
+	printCountryX(citiesPro, citiesPro.size());
+	cout << endl << "Distance: " << totalDistanceX(citiesPro, citiesPro.size());
 
-    vector<city> half1 = twoHalves.front();
-    vector<city> half2 = twoHalves.back();
-
-
-    return joinTwoRoutes(divideAndConquer(half1, n), divideAndConquer(half2, n) );
-  }
-}
-
-
-
-
-int main() {
-
-
-
-
-
-
-  city project[48] = {city(6734, 1453), city(2233, 10),	city(5530, 1424), city(401, 841),	city(3082, 1644),
-  	city(7608, 4458), city(7573, 3716), city(7265, 1268), city(6898, 1885), city(1112, 2049),
-  	city(5468, 2606), city(5989, 2873), city(4706, 2674), city(4612, 2035), city(6347, 2683),
-  	city(6107, 669),  city(7611, 5184), city(7462, 3590), city(7732, 4723), city(5900, 3561),
-  	city(4483, 3369), city(6101, 1110), city(5199, 2182), city(1633, 2809), city(4307, 2322),
-  	city(675, 1006),  city(7555, 4819), city(7541, 3981), city(3177, 756),	city(7352, 4506),
-  	city(7545, 2801), city(3245, 3305), city(6426, 3173), city(4608, 1198), city(23, 2216),
-  	city(7248, 3779), city(7762, 4595), city(7392, 2244), city(3484, 2829), city(6271, 2135),
-  	city(4985, 140),  city(1916, 1569), city(7280, 4899), city(7509, 3239), city(10, 2676),
-  	city(6807, 2993), city(5185, 3258), city(3023, 1942)};
-
-
-
-
-
-  vector<city> conversion;
-
-  for(int x = 0; x < 48; x++) {
-    conversion.push_back(project[x]);
-
-  }
-
-  vector<city> citiesPro;
-  citiesPro = divideAndConquer(conversion, 3);
-  printCountryx(citiesPro, citiesPro.size());
-  cout << endl << "Distance: " << totalDistanceX(citiesPro, citiesPro.size());
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  return 0;
+	return 0;
 }
