@@ -11,7 +11,7 @@ struct City
 	City(const uint16_t t_x, const uint16_t t_y) : x(t_x), y(t_y) {}
 };
 
-float totalDistanceX(std::vector<City> route, size_t size)
+float totalDistanceX(const std::vector<City>& route, const size_t size)
 {
 	float sum = 0.f;
 	for(size_t x = 0; x < size - 1; ++x)
@@ -23,25 +23,24 @@ float totalDistanceX(std::vector<City> route, size_t size)
 	return sum;
 }
 
-void printCountryX(std::vector<City> route, size_t size)
+void printCountryX(const std::vector<City>& route)
 {
-	// Why not get the size from vector? route.size()?
-	for(size_t s = 0; s < size; ++s)
-		fmt::print("\nRoute {} -> x: {} y: {}\n", s + 1, route[s].x, route[s].y);
+	std::for_each(route.cbegin(), route.cend(), [i = 1ULL](const City& city) mutable {
+		fmt::print("Route {} -> x: {} y: {}\n", i++, city.x, city.y);
+	});
 }
 
-void changeRouteX(std::vector<City>& route, size_t indexf, size_t indexs)
+void changeRouteX(std::vector<City>& route, const size_t indexf, const size_t indexs)
 {
-	City temp {0, 0};
-	temp = route[indexf];
+	// Is this just std::swap(route[indexf], route[indexs]); ?
+	City temp = route[indexf];
 	route.at(indexf) = route[indexs];
 	route.at(indexs) = temp;
 }
 
-std::vector<City> shortestForThreeX(std::vector<City> route)
+std::vector<City> shortestForThreeX(std::vector<City>& route)
 {
-	std::vector<City> rCity;
-	rCity = route;
+	std::vector<City> rCity = route;
 
 	float record = totalDistanceX(route, route.size());
 	changeRouteX(route, 1, 2);
@@ -49,38 +48,38 @@ std::vector<City> shortestForThreeX(std::vector<City> route)
 	if(totalDistanceX(route, 3) < record)
 	{
 		rCity = route;
-
 		record = totalDistanceX(route, 3);
 	}
+
 	changeRouteX(route, 0, 1);
 	changeRouteX(route, 0, 2);
 
 	if(totalDistanceX(route, 3) < record)
 	{
 		rCity = route;
-
 		record = totalDistanceX(route, 3);
 	}
 
 	return rCity;
 }
 
-std::vector<std::vector<City>> possibleRoutes(std::vector<City> country)
+std::vector<std::vector<City>> possibleRoutes(const std::vector<City>& country)
 {
 	std::vector<std::vector<City>> allPossibleRoutes;
 	std::vector<City> temp;
 	std::vector<City> a;
 	std::vector<City> b;
 
-	int len = country.size();
+	size_t len = country.size();
 
-	for(int s = 0; s < len; s++)
+	for(size_t s = 0; s < len; ++s)
 	{
 		a = std::vector<City>(country.begin() + s, country.end());
 		b = std::vector<City>(country.begin(), country.begin() + s);
 
 		temp.reserve(a.size() + b.size());
 
+		// Assignment erases reserve
 		temp = a;
 		temp.insert(temp.end(), b.begin(), b.end());
 
@@ -90,18 +89,14 @@ std::vector<std::vector<City>> possibleRoutes(std::vector<City> country)
 	return allPossibleRoutes;
 }
 
-std::vector<City> combineTwoRoutes(const std::vector<City> route1, const std::vector<City> route2)
+std::vector<City> combineTwoRoutes(const std::vector<City>& route1, const std::vector<City>& route2)
 {
-	std::vector<City> final_route;
-	final_route.reserve(route1.size() + route2.size());
-	// Unnecessary reserve
-	// Just final_route(route1) is enough
-	final_route = route1;
+	std::vector<City> final_route(route1);
 	final_route.insert(final_route.end(), route2.begin(), route2.end());
 	return final_route;
 }
 
-std::vector<City> joinTwoRoutes(const std::vector<City> route1, const std::vector<City> route2)
+std::vector<City> joinTwoRoutes(const std::vector<City>& route1, const std::vector<City>& route2)
 {
 	std::vector<City> combinedRoute;
 	std::vector<City> combinedRouteAlt;
@@ -110,8 +105,6 @@ std::vector<City> joinTwoRoutes(const std::vector<City> route1, const std::vecto
 	std::vector<std::vector<City>> routesForFormer;
 	std::vector<std::vector<City>> routesForLatter;
 
-	routeToBeReturned = combinedRoute;
-
 	combinedRoute = combineTwoRoutes(route1, route2);
 	routeToBeReturned = combinedRoute;
 
@@ -119,9 +112,9 @@ std::vector<City> joinTwoRoutes(const std::vector<City> route1, const std::vecto
 	routesForLatter = possibleRoutes(route2);
 
 	float shortestDistance = totalDistanceX(combinedRoute, combinedRoute.size());
-	for(size_t a = 0; a < route1.size(); a++)
+	for(size_t a = 0; a < route1.size(); ++a)
 	{
-		for(size_t b = 0; b < route2.size(); b++)
+		for(size_t b = 0; b < route2.size(); ++b)
 		{
 			combinedRoute = combineTwoRoutes(routesForFormer[a], routesForLatter[b]);
 			reversedRoute =
@@ -137,7 +130,6 @@ std::vector<City> joinTwoRoutes(const std::vector<City> route1, const std::vecto
 			if(totalDistanceX(combinedRoute, combinedRoute.size()) < shortestDistance)
 			{
 				shortestDistance = totalDistanceX(combinedRoute, combinedRoute.size());
-
 				routeToBeReturned = combinedRoute;
 			}
 		}
@@ -154,7 +146,7 @@ uint16_t extent(const std::vector<uint16_t>& nums)
 	return max - min;
 }
 
-std::vector<std::vector<City>> splitCities(std::vector<City> route)
+std::vector<std::vector<City>> splitCities(std::vector<City>& route)
 {
 	std::vector<uint16_t> xValues;
 	std::vector<uint16_t> yValues;
@@ -227,7 +219,7 @@ std::vector<std::vector<City>> splitCities(std::vector<City> route)
 	return twoSplitCities;
 }
 
-std::vector<City> divideAndConquer(std::vector<City> country, const size_t n)
+std::vector<City> divideAndConquer(std::vector<City>& country, const size_t n)
 {
 	if(country.size() <= n)
 	{
@@ -246,7 +238,7 @@ std::vector<City> divideAndConquer(std::vector<City> country, const size_t n)
 
 int main()
 {
-	std::array city_array {
+	std::vector<City> conversion {
 		City(6734, 1453), City(2233, 10),	City(5530, 1424), City(401, 841),	City(3082, 1644),
 		City(7608, 4458), City(7573, 3716), City(7265, 1268), City(6898, 1885), City(1112, 2049),
 		City(5468, 2606), City(5989, 2873), City(4706, 2674), City(4612, 2035), City(6347, 2683),
@@ -258,12 +250,8 @@ int main()
 		City(4985, 140),  City(1916, 1569), City(7280, 4899), City(7509, 3239), City(10, 2676),
 		City(6807, 2993), City(5185, 3258), City(3023, 1942)};
 
-	// Why not just make it a vector using the same initialization?
-	std::vector<City> conversion(city_array.begin(), city_array.end());
-
-	std::vector<City> citiesPro;
-	citiesPro = divideAndConquer(conversion, 3);
-	printCountryX(citiesPro, citiesPro.size());
+	std::vector<City> citiesPro = divideAndConquer(conversion, 3);
+	printCountryX(citiesPro);
 	fmt::print("\nDistance: {}\n", totalDistanceX(citiesPro, citiesPro.size()));
 
 	return 0;
