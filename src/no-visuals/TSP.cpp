@@ -1,4 +1,5 @@
 #include "ExhaustiveSearch.hpp"
+#include "Genetic.hpp"
 #include "NearestNeighbour.hpp"
 #include "RepetitiveNearestNeighbour.hpp"
 #include "Utilities.hpp"
@@ -13,8 +14,8 @@ int main()
 	{
 		rt::Timer t_algo("Repetitive Nearest Neighbour");
 
-		RepetitiveNearestNeighbour<uint16_t, city_array.size()> nn;
-		const auto& [distance, shortest_path] = nn.exec(city_array, 47ULL, 0U);
+		Genetic gen;
+		const auto& [distance, shortest_path] = gen.exec(city_array, 47ULL, 0U);
 		fmt::print("Distance: {}\nArray: {}\n", distance, shortest_path);
 	}
 
