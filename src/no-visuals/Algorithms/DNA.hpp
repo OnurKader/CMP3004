@@ -29,6 +29,13 @@ T randomFromRange(const T min,
 	return uniform_dist(s_def_random_engine);
 }
 
+template<typename T>
+T randomFromRange(const T min, const T max) requires std::is_integral_v<T>
+{
+	static std::uniform_int_distribution<> uniform_dist(min, max);
+	return uniform_dist(s_def_random_engine);
+}
+
 template<typename T, size_t S>
 class DNA final
 {
@@ -66,17 +73,17 @@ public:
 		// TODO: Move the uniform distributor somewhere else?
 		// Maybe a global templated function with the size so it returns what we want using the def
 		// engine?
-		size_t gene_length =
-			std::uniform_int_distribution<size_t>(0UL, S - 1UL)(s_def_random_engine);
+		const size_t first = randomFromRange(0UL, S - 2UL);
+		const size_t last = randomFromRange(first + 1UL, S - 1UL);
+
+		for(size_t i = first; i < last; ++i)
+			child_dna.gene(i) = this->gene(i);
 
 		for(size_t i = 0ULL; i < S; ++i)
 		{
-			child_dna.gene(i) = [&] {
-				if(i < gene_length)
-					return this->gene(i);
-				else
-					return other.gene(i);
-			}();
+			const size_t index_from_other = other.gene(i);
+			if(!child_dna.contains(index_from_other))
+				child_dna.gene(i) = index_from_other;
 		}
 
 		return child_dna;
@@ -89,11 +96,17 @@ public:
 			if(randomFromRange(0.f, 1.f) < mutation_chance)
 			{
 				// TODO: Decide what to do here
-				const size_t random_index = 1;
+				// Maybe don't do adjacent swaps, maybe two random cities swap, who knows
+				const size_t random_index = randomFromRange(0UL, S - 1UL);
 				const size_t next_index = (random_index) % S;
-				std::swap(m_genes.begin() + random_index, m_genes.begin() + next_index);
+				std::swap(m_genes[random_index], m_genes[next_index]);
 			}
 		}
+	}
+
+	bool contains(const T val_to_search)
+	{
+		return (std::find(m_genes.cbegin(), m_genes.cend(), val_to_search) != m_genes.cend());
 	}
 
 private:

@@ -66,7 +66,7 @@ int main()
 			break;
 	}
 
-	//	fmt::print("Thanks! Hope you enjoyed my program ^_^\n");
+	//	fmt::print("Thanks! Hope you enjoyed our program ^_^\n");
 
 	return 0;
 }
