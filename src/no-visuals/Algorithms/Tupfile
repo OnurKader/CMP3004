@@ -1,6 +1,6 @@
 include_rules
 
-CXX_LIBS += -lfmt -lpthread
+CXX_LIBS += -lfmt
 CXX_FLAGS += -I..
 
 : foreach *.cpp | *.hpp |> !cxx |> %B.o
