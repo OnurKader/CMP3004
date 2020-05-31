@@ -190,7 +190,7 @@ vector<city> joinTwoRoutes(vector<city> route1, vector<city> route2) {
 
 }
 
-int extent(vector<int> nums) {
+int extentX(vector<int> nums) {
   int min = *min_element(nums.begin(), nums.end());
   int max = *max_element(nums.begin(), nums.end());
 
@@ -218,7 +218,7 @@ vector<vector<city> > splitCities(vector<city> route) {
     yValues.push_back(route[s].y);
 
   }
-if(extent(xValues) > extent(yValues)) {
+if(extentX(xValues) > extentX(yValues)) {
   for(int s = 0; s < len; s++) {
     for(int d = 0; d < route.size(); d++) {
 
