@@ -70,7 +70,6 @@ public:
 
 		//			if(iter_count > 9000)
 		//				break;
-
 		DNA<T, S> mother;
 		DNA<T, S> father;
 		mother.crossover(father);

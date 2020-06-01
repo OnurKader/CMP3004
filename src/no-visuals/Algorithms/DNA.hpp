@@ -54,16 +54,18 @@ public:
 		for(size_t i = first; i < last; ++i)
 			child_dna.m_genes[i] = this->m_genes[i];
 
-		fmt::print("child-before: {}\n", child_dna.genes());
+		fmt::print("before: {}\n", child_dna.m_genes);
 
-		for(size_t i = 0ULL; i < S; ++i)
-		{
-			const size_t index_from_other = other.m_genes[i];
-			if(child_dna.m_genes[i] == 69U && !child_dna.contains(static_cast<T>(index_from_other)))
-				child_dna.m_genes[i] = static_cast<T>(index_from_other);
-		}
+		for(size_t i = 0ULL; i < other.m_genes.size(); ++i)
+			if(!child_dna.contains(other.m_genes[i]))
+				for(size_t j = 0ULL; j < child_dna.m_genes.size(); ++j)
+					if(child_dna.m_genes[j] == 69U)
+					{
+						child_dna.m_genes[j] = other.m_genes[i];
+						break;
+					}
 
-		fmt::print("child-after: {}\n", child_dna.genes());
+		fmt::print("after:  {}\n", child_dna.m_genes);
 
 		return child_dna;
 	}
