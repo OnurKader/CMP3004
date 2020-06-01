@@ -4,5 +4,6 @@ EXE := TSP_File
 CXX_FLAGS += -IAlgorithms -I.
 CXX_LIBS += -lfmt -lpthread
 
-: foreach *.cpp | *.hpp |> !cxx |> {objs}
-: {objs} | Algorithms/*.o |> $(CXX) -o %o %f $(CXX_LIBS) $(CXX_FLAGS) |> $(EXE)
+: foreach *.cpp |> !cxx |> {objs}
+: {objs} Algorithms/*.o |> $(CXX) -o %o %f $(CXX_LIBS) $(CXX_FLAGS) |> $(EXE)
+

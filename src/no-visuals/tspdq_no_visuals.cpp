@@ -236,6 +236,7 @@ std::vector<City> divideAndConquer(std::vector<City>& country, const size_t n)
 	}
 }
 
+#if 0
 int main()
 {
 	std::vector<City> conversion {
@@ -256,3 +257,5 @@ int main()
 
 	return 0;
 }
+#endif
+

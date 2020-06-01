@@ -50,8 +50,6 @@ public:
 
 		const size_t first = randomInt(0UL, S - 2UL);
 		const size_t last = randomInt(first + 1UL, S - 1UL);
-		for(size_t i = 0ULL; i < 100; ++i)
-			fmt::print("first: {}, last: {}\n", first, randomInt(first + 1UL, S - 1UL));
 
 		fmt::print("first: {}, last: {}\n", first, last);
 
