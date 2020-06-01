@@ -25,16 +25,15 @@ public:
 	float calculateFitness(const std::array<T, S>& target_city_order)
 	{
 		float score = 0.f;
-		for(size_t i = 0ULL; i < m_genes.size(); ++i)
-			if(m_genes[i] == target_city_order[i])
-				++score;
+		//		for(size_t i = 0ULL; i < m_genes.size(); ++i)
+		//			if(m_genes[i] == target_city_order[i])
+		//				++score;
 
 		// FIXME: Instead of 1.f / ... get a more sensible value, maybe just look at the 2 furthest
 		// cities and get the max distance from them
 		score += 1.f / (std::pow(getDistance(), 8.f) + 1.f);
 
-		m_fitness = score / S;
-		return m_fitness;
+		return m_fitness = score / S;
 	}
 
 	T& gene(const size_t index = 0ULL) noexcept { return m_genes[index]; }

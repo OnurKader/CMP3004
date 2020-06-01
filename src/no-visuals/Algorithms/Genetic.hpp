@@ -9,6 +9,8 @@
 #include <algorithm>
 #include <array>
 #include <fmt/format.hpp>
+#include <fmt/ostream.hpp>
+#include <fstream>
 #include <numeric>
 #include <vector>
 
@@ -21,6 +23,8 @@ public:
 
 	std::pair<float, std::array<T, S>> exec(const uint8_t log_level = 0U)
 	{
+		std::ofstream out_file("ga_output");
+
 		size_t iter_count = 0ULL;
 		float prev_shortest_distance = m_shortest_distance;
 		while(true)
@@ -44,6 +48,10 @@ public:
 					{
 						fmt::print(
 							"Gen {:>7} - shortest_dist: {:.2f}\n", iter_count, m_shortest_distance);
+						fmt::print(out_file,
+								   "Gen {:>7} - shortest_dist: {:.2f}\n",
+								   iter_count,
+								   m_shortest_distance);
 						prev_shortest_distance = m_shortest_distance;
 					}
 					break;
