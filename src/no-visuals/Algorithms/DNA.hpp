@@ -21,7 +21,9 @@ public:
 		std::shuffle(m_genes.begin(), m_genes.end(), s_def_random_engine);
 	}
 
-	DNA(DNA&& other) : m_genes(std::move(other.m_genes)), m_fitness(other.m_fitness) {}
+	DNA(const DNA& other) : m_genes(other.m_genes), m_fitness(other.m_fitness) {}
+
+	DNA(DNA&& other) : m_genes(std::move(other.m_genes)), m_fitness(std::move(other.m_fitness)) {}
 
 	float calculateFitness(const std::array<T, S>& target_city_order)
 	{
@@ -61,8 +63,6 @@ public:
 			if(!child_dna.contains(static_cast<T>(index_from_other)))
 				child_dna.m_genes.emplace_back(static_cast<T>(index_from_other));
 		}
-
-		fmt::print("GREP: {}\n", child_dna.m_genes.size());
 
 		return child_dna;
 	}
