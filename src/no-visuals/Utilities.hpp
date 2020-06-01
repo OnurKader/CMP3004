@@ -135,7 +135,9 @@ struct fmt::formatter<std::vector<T>>
 		format_to(ctx.out(), "[");
 		for(size_t i = 0ULL; i < vec.size() - 1ULL; ++i)
 			format_to(ctx.out(), "{}, ", vec[i]);
-		return format_to(ctx.out(), "{}]", vec.back());
+		if(vec.size())
+			return format_to(ctx.out(), "{}]", vec.back());
+		return format_to(ctx.out(), "]");
 	}
 };
 

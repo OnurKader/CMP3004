@@ -46,10 +46,16 @@ public:
 		//		}
 		DNA<T, S> mother;
 		DNA<T, S> father;
+		fmt::print("m ");
 		mother.printGenes();
+		fmt::print("f ");
 		father.printGenes();
 		DNA<T, S> child = std::move(mother.crossover(father));
-		fmt::print("\n");
+		fmt::print("c ");
+		child.printGenes();
+		child.mutate(0.012f);
+		fmt::print("c ");
+		child.printGenes();
 
 		return {};
 	}

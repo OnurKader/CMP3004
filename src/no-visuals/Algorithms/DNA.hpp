@@ -7,6 +7,7 @@
 #include <array>
 #include <numeric>
 #include <type_traits>
+#include <vector>
 
 static constexpr auto& ga_city_array = cities;
 
@@ -14,7 +15,7 @@ template<typename T, size_t S>
 class DNA final
 {
 public:
-	DNA() : m_fitness {0.f}
+	DNA() : m_genes(S), m_fitness {0.f}
 	{
 		std::iota(m_genes.begin(), m_genes.end(), 0U);
 		std::shuffle(m_genes.begin(), m_genes.end(), s_def_random_engine);
@@ -46,40 +47,32 @@ public:
 	DNA crossover(const DNA& other)
 	{
 		DNA child_dna;
-		child_dna.m_genes.fill(0U);
+		child_dna.m_genes.clear();
 
-		const size_t first = randomInt(0UL, S - 2UL);
-		const size_t last = randomInt(first + 1UL, S - 1UL);
-
-		fmt::print("first: {}, last: {}\n", first, last);
+		const size_t first = randomInt(0UL, this->m_genes.size() - 2UL);
+		const size_t last = randomInt(first + 1UL, this->m_genes.size() - 1UL);
 
 		for(size_t i = first; i < last; ++i)
-			child_dna.gene(i) = this->gene(i);
-
-		child_dna.printGenes();
+			child_dna.m_genes.emplace_back(this->m_genes[i]);
 
 		for(size_t i = 0ULL; i < S; ++i)
 		{
-			const size_t index_from_other = other.gene(i);
+			const size_t index_from_other = other.m_genes[i];
 			if(!child_dna.contains(static_cast<T>(index_from_other)))
-				child_dna.gene(i) = static_cast<T>(index_from_other);
+				child_dna.m_genes.emplace_back(static_cast<T>(index_from_other));
 		}
-
-		child_dna.printGenes();
 
 		return child_dna;
 	}
 
 	void mutate(const float mutation_chance) noexcept
 	{
-		for(size_t i = 0ULL; i < S; ++i)
+		for(size_t i = 0ULL; i < m_genes.size(); ++i)
 		{
 			if(randomFloat(0.f, 1.f) < mutation_chance)
 			{
-				// TODO: Decide what to do here
-				// Maybe don't do adjacent swaps, maybe two random cities swap, who knows
 				const size_t random_index = randomInt(0UL, S - 1UL);
-				const size_t next_index = (random_index + 1ULL) % S;
+				const size_t next_index = (random_index + 1ULL) % m_genes.size();
 				std::swap(m_genes[random_index], m_genes[next_index]);
 			}
 		}
@@ -92,9 +85,16 @@ public:
 
 	void printGenes() { fmt::print("{}\n", m_genes); }
 
-	bool isShortestPath() const { return m_genes == shortest_path_for_48; }
+	bool isShortestPath() const
+	{
+		const auto& [first, second] = std::mismatch(m_genes.cbegin(),
+													m_genes.cend(),
+													shortest_path_for_48.cbegin(),
+													shortest_path_for_48.cend());
+		return (first == m_genes.cend() || second == shortest_path_for_48.cend());
+	}
 
 private:
-	std::array<T, S> m_genes;
+	std::vector<T> m_genes {};
 	float m_fitness;
 };
