@@ -74,6 +74,7 @@ public:
 		DNA<T, S> mother;
 		DNA<T, S> father;
 		mother.crossover(father);
+		mother.crossover(father);
 
 		return {};
 	}

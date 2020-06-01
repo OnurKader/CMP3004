@@ -46,7 +46,7 @@ public:
 	DNA crossover(const DNA& other)
 	{
 		DNA child_dna;
-		child_dna.m_genes.fill(0U);
+		child_dna.m_genes.fill(69U);
 
 		const size_t first = randomInt(0UL, this->m_genes.size() - 2UL);
 		const size_t last = randomInt(first + 1UL, this->m_genes.size() - 1UL);
@@ -54,14 +54,16 @@ public:
 		for(size_t i = first; i < last; ++i)
 			child_dna.m_genes[i] = this->m_genes[i];
 
+		fmt::print("child-before: {}\n", child_dna.genes());
+
 		for(size_t i = 0ULL; i < S; ++i)
 		{
 			const size_t index_from_other = other.m_genes[i];
-			if(!child_dna.contains(static_cast<T>(index_from_other)))
+			if(child_dna.m_genes[i] == 69U && !child_dna.contains(static_cast<T>(index_from_other)))
 				child_dna.m_genes[i] = static_cast<T>(index_from_other);
 		}
 
-		fmt::print("child: {}\n", child_dna.genes());
+		fmt::print("child-after: {}\n", child_dna.genes());
 
 		return child_dna;
 	}
