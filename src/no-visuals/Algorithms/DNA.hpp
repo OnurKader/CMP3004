@@ -26,7 +26,7 @@ public:
 	float calculateFitness(const std::array<T, S>& target_city_order)
 	{
 		float score = 0.f;
-		for(size_t i = 0ULL; i < S; ++i)
+		for(size_t i = 0ULL; i < m_genes.size(); ++i)
 			if(m_genes[i] == target_city_order[i])
 				++score;
 
@@ -62,6 +62,8 @@ public:
 				child_dna.m_genes.emplace_back(static_cast<T>(index_from_other));
 		}
 
+		fmt::print("GREP: {}\n", child_dna.m_genes.size());
+
 		return child_dna;
 	}
 
@@ -95,6 +97,7 @@ public:
 	}
 
 private:
+	// For some reason crossover was giving me problems if it was an array
 	std::vector<T> m_genes {};
 	float m_fitness;
 };
