@@ -66,6 +66,30 @@ public:
 		return shortest_distance;
 	}
 
+	std::array<T, S> getShortestPathFromPopulation() const
+	{
+		float shortest_distance = FLT_MAX;
+		size_t shortest_path_index = 0ULL;
+
+		size_t index = 0ULL;
+		for(const DNA<T, S>& dna: m_population)
+		{
+			const float dist = dna.getDistance();
+			if(dist < shortest_distance)
+			{
+				shortest_distance = dist;
+				shortest_path_index = index;
+			}
+			++index;
+		}
+
+		const auto& temp = m_population[shortest_path_index].genes();
+		std::array<T, S> result;
+		std::copy(temp.cbegin(), temp.cend(), result.begin());
+
+		return result;
+	}
+
 private:
 	std::array<DNA<T, S>, P> m_population;
 	std::array<float, S> m_fitnesses;

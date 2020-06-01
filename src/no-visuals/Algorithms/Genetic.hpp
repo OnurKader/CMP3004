@@ -27,12 +27,13 @@ public:
 
 		size_t iter_count = 0ULL;
 		float prev_shortest_distance = m_shortest_distance;
+		std::array<T, S> shortest_path;
 		while(true)
 		{
 			m_population.calculateFitness();
 			m_population.normalizeFitnesses();
 
-			if(m_population.hasShortestPath())
+			if(/*m_population.hasShortestPath()*/ m_shortest_distance <= 33524.f)
 			{
 				fmt::print("Shortest Path Reached\n");
 				break;
@@ -52,7 +53,10 @@ public:
 								   "Gen {:>7} - shortest_dist: {:.2f}\n",
 								   iter_count,
 								   m_shortest_distance);
+						out_file.flush();
+
 						prev_shortest_distance = m_shortest_distance;
+						shortest_path = m_population.getShortestPathFromPopulation();
 					}
 					break;
 				case 2U: fmt::print("\nFitnesses: {}\n", m_population.fitnesses()); break;
@@ -61,9 +65,12 @@ public:
 
 			nextGeneration();
 			++iter_count;
+
+			//			if(iter_count > 9000)
+			//				break;
 		}
 
-		return {};
+		return std::make_pair(m_shortest_distance, shortest_path);
 	}
 
 private:

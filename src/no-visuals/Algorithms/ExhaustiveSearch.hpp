@@ -13,18 +13,17 @@ class ExhaustiveSearch
 {
 public:
 	constexpr ExhaustiveSearch() :
-		m_shortest_distance(FLT_MAX), m_prev_shortest_distance(m_shortest_distance)
+		m_shortest_path {T {}},
+		m_shortest_distance(FLT_MAX),
+		m_prev_shortest_distance(m_shortest_distance)
 	{
 		std::iota(m_array.begin(), m_array.end(), T {});
 		// Default initialize the array or assign to m_array's current, beginning, state?
-
-		// FIXME: Just member initialize list?
-		m_shortest_path.fill(T {});
 	}
 
 	// Multi-threaded for_each?
 	std::pair<float, std::array<T, S>> exec(const std::array<City, S>& city_array,
-												   const uint8_t log_level = 0U)
+											const uint8_t log_level = 0U)
 	{
 		for(size_t i = 0ULL; i < ctx::factorial(m_array.size()); ++i)
 		{
