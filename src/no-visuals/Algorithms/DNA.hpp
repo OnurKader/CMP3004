@@ -7,13 +7,12 @@
 #include <array>
 #include <numeric>
 #include <type_traits>
-#include <vector>
 
 template<typename T, size_t S>
 class DNA final
 {
 public:
-	DNA() : m_genes(S), m_fitness {}
+	DNA() : m_fitness {}
 	{
 		std::iota(m_genes.begin(), m_genes.end(), 0U);
 		std::shuffle(m_genes.begin(), m_genes.end(), s_def_random_engine);
@@ -39,27 +38,27 @@ public:
 	T& gene(const size_t index = 0ULL) noexcept { return m_genes[index]; }
 	const T& gene(const size_t index = 0ULL) const noexcept { return m_genes[index]; }
 
-	std::vector<T>& genes() noexcept { return m_genes; }
-	const std::vector<T>& genes() const noexcept { return m_genes; }
+	std::array<T, S>& genes() noexcept { return m_genes; }
+	const std::array<T, S>& genes() const noexcept { return m_genes; }
 
 	float fitness() const noexcept { return m_fitness; }
 
 	DNA crossover(const DNA& other)
 	{
 		DNA child_dna;
-		child_dna.m_genes.clear();
+		child_dna.m_genes.fill(0U);
 
 		const size_t first = randomInt(0UL, this->m_genes.size() - 2UL);
 		const size_t last = randomInt(first + 1UL, this->m_genes.size() - 1UL);
 
 		for(size_t i = first; i < last; ++i)
-			child_dna.m_genes.emplace_back(this->m_genes[i]);
+			child_dna.m_genes[i] = this->m_genes[i];
 
 		for(size_t i = 0ULL; i < S; ++i)
 		{
 			const size_t index_from_other = other.m_genes[i];
 			if(!child_dna.contains(static_cast<T>(index_from_other)))
-				child_dna.m_genes.emplace_back(static_cast<T>(index_from_other));
+				child_dna.m_genes[i] = static_cast<T>(index_from_other);
 		}
 
 		return child_dna;
@@ -71,7 +70,7 @@ public:
 		{
 			if(randomFloat(0.f, 1.f) < mutation_chance)
 			{
-				const size_t random_index = randomInt(0UL, S - 1UL);
+				const size_t random_index = randomInt(0ULL, S - 1ULL);
 				const size_t next_index = (random_index + 1ULL) % m_genes.size();
 				std::swap(m_genes[random_index], m_genes[next_index]);
 			}
@@ -97,8 +96,6 @@ public:
 	float getDistance() const { return getTotalDistanceOfCities(cities, m_genes); }
 
 private:
-	// FIXME: It was the random number probably, switch back to std::array<T, S>
-	// For some reason crossover was giving me problems if it was an array
-	std::vector<T> m_genes {};
+	std::array<T, S> m_genes;
 	float m_fitness;
 };
