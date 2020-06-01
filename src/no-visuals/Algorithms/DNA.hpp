@@ -61,6 +61,8 @@ public:
 				child_dna.m_genes[i] = static_cast<T>(index_from_other);
 		}
 
+		fmt::print("child: {}\n", child_dna.genes());
+
 		return child_dna;
 	}
 

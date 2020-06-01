@@ -23,6 +23,7 @@ public:
 
 	std::pair<float, std::array<T, S>> exec(const uint8_t log_level = 0U)
 	{
+		/*
 		std::ofstream out_file("ga_output");
 
 		size_t iter_count = 0ULL;
@@ -33,45 +34,51 @@ public:
 			m_population.calculateFitness();
 			m_population.normalizeFitnesses();
 
-			if(/*m_population.hasShortestPath()*/ m_shortest_distance <= 33524.f)
-			{
-				fmt::print("Shortest Path Reached\n");
-				break;
-			}
-
-			m_shortest_distance =
-				std::min(m_shortest_distance, m_population.getShortestDistanceFromPopulation());
-
-			switch(log_level)
-			{
-				case 1U:
-					if(m_shortest_distance < prev_shortest_distance)
-					{
-						fmt::print(
-							"Gen {:>7} - shortest_dist: {:.2f}\n", iter_count, m_shortest_distance);
-						fmt::print(out_file,
-								   "Gen {:>7} - shortest_dist: {:.2f}\n",
-								   iter_count,
-								   m_shortest_distance);
-						out_file.flush();
-
-						prev_shortest_distance = m_shortest_distance;
-						shortest_path = m_population.getShortestPathFromPopulation();
-					}
-					break;
-				case 2U: fmt::print("\nFitnesses: {}\n", m_population.fitnesses()); break;
-				default: break;
-			}
-
-			nextGeneration();
-			++iter_count;
-
-			//			if(iter_count > 9000)
-			//				break;
+			if(m_shortest_distance <= 33524.f)
+		{
+			fmt::print("Shortest Path Reached\n");
+			break;
 		}
 
-		return std::make_pair(m_shortest_distance, shortest_path);
+		m_shortest_distance =
+			std::min(m_shortest_distance, m_population.getShortestDistanceFromPopulation());
+
+		switch(log_level)
+		{
+			case 1U:
+				if(m_shortest_distance < prev_shortest_distance)
+				{
+					fmt::print(
+						"Gen {:>7} - shortest_dist: {:.2f}\n", iter_count, m_shortest_distance);
+					fmt::print(out_file,
+							   "Gen {:>7} - shortest_dist: {:.2f}\n",
+							   iter_count,
+							   m_shortest_distance);
+					out_file.flush();
+
+					prev_shortest_distance = m_shortest_distance;
+					shortest_path = m_population.getShortestPathFromPopulation();
+				}
+				break;
+			case 2U: fmt::print("\nFitnesses: {}\n", m_population.fitnesses()); break;
+			default: break;
+		}
+
+		nextGeneration();
+		++iter_count;
+		*/
+
+		//			if(iter_count > 9000)
+		//				break;
+
+		DNA<T, S> mother;
+		DNA<T, S> father;
+		mother.crossover(father);
+
+		return {};
 	}
+
+	//	return std::make_pair(m_shortest_distance, shortest_path);
 
 private:
 	Population<T, S, P> m_population;
