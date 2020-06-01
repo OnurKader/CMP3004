@@ -13,7 +13,7 @@ template<typename T, size_t S>
 class DNA final
 {
 public:
-	DNA() : m_genes(S), m_fitness {0.f}
+	DNA() : m_genes(S), m_fitness {}
 	{
 		std::iota(m_genes.begin(), m_genes.end(), 0U);
 		std::shuffle(m_genes.begin(), m_genes.end(), s_def_random_engine);
@@ -31,7 +31,7 @@ public:
 
 		// FIXME: Instead of 1.f / ... get a more sensible value, maybe just look at the 2 furthest
 		// cities and get the max distance from them
-		score += 1.f / (std::pow(getDistance(), 6.f) + 1.f);
+		score += 1.f / (std::pow(getDistance(), 8.f) + 1.f);
 
 		m_fitness = score / S;
 		return m_fitness;

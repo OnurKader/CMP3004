@@ -16,16 +16,17 @@ template<typename T, size_t S, size_t P>
 class Genetic final
 {
 public:
-	Genetic() : m_population {}, m_shortest_distance {FLT_MAX} {};
+	Genetic(const float mutation_rate) :
+		m_population {}, m_shortest_distance {FLT_MAX}, m_mutation_rate {mutation_rate} {};
 
 	std::pair<float, std::array<T, S>> exec(const uint8_t log_level = 0U)
 	{
 		size_t iter_count = 0ULL;
+		float prev_shortest_distance = m_shortest_distance;
 		while(true)
 		{
 			m_population.calculateFitness();
 			m_population.normalizeFitnesses();
-			// fmt::print("\nFitnesses: {}\n", m_population.fitnesses());
 
 			if(m_population.hasShortestPath())
 			{
@@ -36,16 +37,22 @@ public:
 			m_shortest_distance =
 				std::min(m_shortest_distance, m_population.getShortestDistanceFromPopulation());
 
-			fmt::print("Gen {} - shortest_dist: {}\n", iter_count, m_shortest_distance);
+			switch(log_level)
+			{
+				case 1U:
+					if(m_shortest_distance < prev_shortest_distance)
+					{
+						fmt::print(
+							"Gen {:>7} - shortest_dist: {:.2f}\n", iter_count, m_shortest_distance);
+						prev_shortest_distance = m_shortest_distance;
+					}
+					break;
+				case 2U: fmt::print("\nFitnesses: {}\n", m_population.fitnesses()); break;
+				default: break;
+			}
 
 			nextGeneration();
 			++iter_count;
-
-			switch(log_level)
-			{
-				case 1U: break;
-				default: break;
-			}
 		}
 
 		return {};
@@ -54,6 +61,7 @@ public:
 private:
 	Population<T, S, P> m_population;
 	float m_shortest_distance;
+	float m_mutation_rate;
 
 	// Should probably be in Population
 	void nextGeneration() noexcept
@@ -65,7 +73,7 @@ private:
 						  DNA<T, S> father = m_population.chooseParent();
 						  DNA<T, S> mother = m_population.chooseParent();
 						  DNA<T, S> child = father.crossover(mother);
-						  child.mutate(0.015f);
+						  child.mutate(m_mutation_rate);
 						  dna = child;
 					  });
 		m_population = new_population;
