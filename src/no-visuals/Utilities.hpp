@@ -6,6 +6,7 @@
 #include <cmath>
 #include <fmt/format.hpp>
 #include <numeric>
+#include <random>
 #include <string_view>
 
 namespace ctx

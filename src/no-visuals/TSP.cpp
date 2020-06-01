@@ -1,6 +1,7 @@
 #include "ExhaustiveSearch.hpp"
 #include "Genetic.hpp"
 #include "NearestNeighbour.hpp"
+#include "Random.hpp"
 #include "RepetitiveNearestNeighbour.hpp"
 #include "Utilities.hpp"
 

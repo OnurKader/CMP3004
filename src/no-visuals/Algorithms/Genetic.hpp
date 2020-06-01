@@ -17,19 +17,47 @@ template<typename T, size_t S, size_t P>
 class Genetic final
 {
 public:
-	Genetic() {};
+	Genetic() : m_population {} {};
 
 	std::pair<float, std::array<T, S>> exec(const uint8_t log_level = 0U)
 	{
-		switch(log_level)
-		{
-			case 1U: fmt::print("Genetic is cool\n"); break;
-			default: break;
-		}
+		//		size_t iter_count = 0ULL;
+		//		while(true)
+		//		{
+		//			m_population.calculateFitness();
+		//			m_population.normalizeFitnesses();
+		//			// fmt::print("\nFitnesses: {}\n", m_population.fitnesses());
+		//			fmt::print("i={}\n", iter_count++);
+
+		//			if(m_population.hasShortestPath())
+		//			{
+		//				fmt::print("Shortest Path Reached\n");
+		//				break;
+		//			}
+
+		//			nextGeneration();
+
+		//			switch(log_level)
+		//			{
+		//				case 1U: break;
+		//				default: break;
+		//			}
+		//			//			break;
+		//		}
+		DNA<T, S> mother;
+		DNA<T, S> father;
+		mother.printGenes();
+		father.printGenes();
+		DNA<T, S> child = std::move(mother.crossover(father));
+		fmt::print("\n");
 
 		return {};
 	}
 
+private:
+	Population<T, S, P> m_population;
+
+	// Should probably be in Population
 	void nextGeneration() noexcept
 	{
 		Population<T, S, P> new_population;
@@ -44,7 +72,4 @@ public:
 					  });
 		m_population = new_population;
 	}
-
-private:
-	Population<T, S, P> m_population;
 };

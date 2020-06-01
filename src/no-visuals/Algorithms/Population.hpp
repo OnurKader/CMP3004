@@ -14,7 +14,8 @@ public:
 	void calculateFitness() noexcept
 	{
 		std::generate(m_fitnesses.begin(), m_fitnesses.end(), [&, i = 0ULL]() mutable {
-			return m_population[i++].fitness;
+			m_population[i].calculateFitness(shortest_path_for_48);
+			return m_population[i++].fitness();
 		});
 	}
 
@@ -30,7 +31,7 @@ public:
 	DNA<T, S> chooseParent()
 	{
 		size_t index = 0ULL;
-		const float chance = randomFromRange(0.f, 1.f);
+		float chance = randomFloat(0.f, 1.f);
 		while(chance > 0.f)
 			chance -= m_fitnesses[index++];
 
@@ -42,6 +43,15 @@ public:
 
 	std::array<float, S>& fitnesses() { return m_fitnesses; }
 	const std::array<float, S>& fitnesses() const { return m_fitnesses; }
+
+	bool hasShortestPath() const
+	{
+		for(const DNA<T, S>& dna: m_population)
+			if(dna.isShortestPath())
+				return true;
+
+		return false;
+	}
 
 private:
 	std::array<DNA<T, S>, P> m_population;

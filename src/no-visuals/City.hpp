@@ -43,7 +43,7 @@ struct City final
 												City(99, 2000),
 												City(4621, 3023)};
 
-[[maybe_unused]] constexpr static std::array shortest_path_for_48 {
+[[maybe_unused]] constexpr static std::array<uint16_t, 48U> shortest_path_for_48 {
 	0, 7,  37, 30, 43, 17, 6, 27, 5, 36, 18, 26, 16, 42, 29, 35, 45, 32, 19, 46, 20, 31, 38, 47,
 	4, 41, 23, 9,  44, 34, 3, 25, 1, 28, 33, 40, 15, 21, 2,	 22, 13, 24, 12, 10, 11, 14, 39, 8};
 

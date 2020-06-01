@@ -1,35 +1,14 @@
 #pragma once
 
 #include "City.hpp"
-#include "Utilities.hpp"
+#include "Random.hpp"
 
 #include <algorithm>
 #include <array>
 #include <numeric>
-#include <random>
 #include <type_traits>
 
-static std::random_device s_random_device {};
-static std::default_random_engine s_def_random_engine {s_random_device()};
-
 static constexpr auto& ga_city_array = cities;
-
-// Maybe I should do SFINAE
-template<typename T>
-T randomFromRange(const T min,
-				  const T max) requires std::is_floating_point_v<T>	   // Qt Creator cannot
-																	   // understand concepts yet
-{
-	static std::uniform_real_distribution<float> uniform_dist(min, max);
-	return uniform_dist(s_def_random_engine);
-}
-
-template<typename T>
-T randomFromRange(const T min, const T max) requires std::is_integral_v<T>
-{
-	static std::uniform_int_distribution<> uniform_dist(min, max);
-	return uniform_dist(s_def_random_engine);
-}
 
 template<typename T, size_t S>
 class DNA final
@@ -40,6 +19,8 @@ public:
 		std::iota(m_genes.begin(), m_genes.end(), 0U);
 		std::shuffle(m_genes.begin(), m_genes.end(), s_def_random_engine);
 	}
+
+	DNA(DNA&& other) : m_genes(std::move(other.m_genes)), m_fitness(other.m_fitness) {}
 
 	float calculateFitness(const std::array<T, S>& target_city_order)
 	{
@@ -65,19 +46,28 @@ public:
 	DNA crossover(const DNA& other)
 	{
 		DNA child_dna;
+		child_dna.m_genes.fill(0U);
 
-		const size_t first = randomFromRange(0UL, S - 2UL);
-		const size_t last = randomFromRange(first + 1UL, S - 1UL);
+		const size_t first = randomInt(0UL, S - 2UL);
+		const size_t last = randomInt(first + 1UL, S - 1UL);
+		for(size_t i = 0ULL; i < 100; ++i)
+			fmt::print("first: {}, last: {}\n", first, randomInt(first + 1UL, S - 1UL));
+
+		fmt::print("first: {}, last: {}\n", first, last);
 
 		for(size_t i = first; i < last; ++i)
 			child_dna.gene(i) = this->gene(i);
 
+		child_dna.printGenes();
+
 		for(size_t i = 0ULL; i < S; ++i)
 		{
 			const size_t index_from_other = other.gene(i);
-			if(!child_dna.contains(index_from_other))
-				child_dna.gene(i) = index_from_other;
+			if(!child_dna.contains(static_cast<T>(index_from_other)))
+				child_dna.gene(i) = static_cast<T>(index_from_other);
 		}
+
+		child_dna.printGenes();
 
 		return child_dna;
 	}
@@ -86,12 +76,12 @@ public:
 	{
 		for(size_t i = 0ULL; i < S; ++i)
 		{
-			if(randomFromRange(0.f, 1.f) < mutation_chance)
+			if(randomFloat(0.f, 1.f) < mutation_chance)
 			{
 				// TODO: Decide what to do here
 				// Maybe don't do adjacent swaps, maybe two random cities swap, who knows
-				const size_t random_index = randomFromRange(0UL, S - 1UL);
-				const size_t next_index = (random_index) % S;
+				const size_t random_index = randomInt(0UL, S - 1UL);
+				const size_t next_index = (random_index + 1ULL) % S;
 				std::swap(m_genes[random_index], m_genes[next_index]);
 			}
 		}
@@ -101,6 +91,10 @@ public:
 	{
 		return (std::find(m_genes.cbegin(), m_genes.cend(), val_to_search) != m_genes.cend());
 	}
+
+	void printGenes() { fmt::print("{}\n", m_genes); }
+
+	bool isShortestPath() const { return m_genes == shortest_path_for_48; }
 
 private:
 	std::array<T, S> m_genes;
