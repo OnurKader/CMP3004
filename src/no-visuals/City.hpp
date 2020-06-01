@@ -3,6 +3,7 @@
 #include "Utilities.hpp"
 
 #include <array>
+#include <cfloat>
 
 struct City final
 {
@@ -62,6 +63,26 @@ constexpr float getTotalDistanceOfCities(const std::array<City, S>& city_arr,
 	}
 
 	result += city_arr[index_array.front()].dist(city_arr[index_array.back()]);
+
+	return result;
+}
+
+template<size_t S>
+float getTotalDistanceOfCities(const std::array<City, S>& city_arr,
+							   const std::vector<uint16_t>& index_vector) noexcept
+{
+	if(index_vector.size() != city_arr.size())
+		return FLT_MAX;
+	float result = 0.f;
+
+	for(size_t i = 0ULL; i < index_vector.size() - 1ULL; ++i)
+	{
+		const uint16_t current_index = index_vector[i];
+		const uint16_t next_index = index_vector[i + 1ULL];
+		result += city_arr[current_index].dist(city_arr[next_index]);
+	}
+
+	result += city_arr[index_vector.front()].dist(city_arr[index_vector.back()]);
 
 	return result;
 }

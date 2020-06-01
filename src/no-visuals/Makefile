@@ -1,5 +1,5 @@
 CXX=g++
-CXX_FLAGS= -Wall -Wextra -Wshadow -Wpedantic -O3 -std=c++2a
+CXX_FLAGS= -Wall -Wextra -Wshadow -Wpedantic -O3 -std=c++2a -IAlgorithms -I.
 CXX_LIBS= -lfmt
 
 EXEC_NAME=TSP_File

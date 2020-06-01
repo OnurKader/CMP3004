@@ -9,8 +9,6 @@
 #include <type_traits>
 #include <vector>
 
-static constexpr auto& ga_city_array = cities;
-
 template<typename T, size_t S>
 class DNA final
 {
@@ -21,9 +19,8 @@ public:
 		std::shuffle(m_genes.begin(), m_genes.end(), s_def_random_engine);
 	}
 
-	DNA(const DNA& other) : m_genes(other.m_genes), m_fitness(other.m_fitness) {}
-
-	DNA(DNA&& other) : m_genes(std::move(other.m_genes)), m_fitness(std::move(other.m_fitness)) {}
+	DNA(const DNA& other) = default;
+	DNA& operator=(const DNA& other) = default;
 
 	float calculateFitness(const std::array<T, S>& target_city_order)
 	{
@@ -34,8 +31,7 @@ public:
 
 		// FIXME: Instead of 1.f / ... get a more sensible value, maybe just look at the 2 furthest
 		// cities and get the max distance from them
-		score +=
-			1.f / (std::pow(getTotalDistanceOfCities(ga_city_array, target_city_order), 6.f) + 1.f);
+		score += 1.f / (std::pow(getDistance(), 6.f) + 1.f);
 
 		m_fitness = score / S;
 		return m_fitness;
@@ -95,6 +91,8 @@ public:
 													shortest_path_for_48.cend());
 		return (first == m_genes.cend() || second == shortest_path_for_48.cend());
 	}
+
+	float getDistance() const { return getTotalDistanceOfCities(cities, m_genes); }
 
 private:
 	// For some reason crossover was giving me problems if it was an array

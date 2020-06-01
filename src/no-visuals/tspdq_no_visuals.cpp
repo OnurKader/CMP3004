@@ -4,14 +4,14 @@
 #include <fmt/format.hpp>
 #include <vector>
 
-struct City
+struct OCity
 {
 	uint16_t x;
 	uint16_t y;
-	City(const uint16_t t_x, const uint16_t t_y) : x(t_x), y(t_y) {}
+	OCity(const uint16_t t_x, const uint16_t t_y) : x(t_x), y(t_y) {}
 };
 
-float totalDistanceX(const std::vector<City>& route, const size_t size)
+float totalDistanceX(const std::vector<OCity>& route, const size_t size)
 {
 	float sum = 0.f;
 	for(size_t x = 0; x < size - 1; ++x)
@@ -23,24 +23,24 @@ float totalDistanceX(const std::vector<City>& route, const size_t size)
 	return sum;
 }
 
-void printCountryX(const std::vector<City>& route)
+void printCountryX(const std::vector<OCity>& route)
 {
-	std::for_each(route.cbegin(), route.cend(), [i = 1ULL](const City& city) mutable {
+	std::for_each(route.cbegin(), route.cend(), [i = 1ULL](const OCity& city) mutable {
 		fmt::print("Route {} -> x: {} y: {}\n", i++, city.x, city.y);
 	});
 }
 
-void changeRouteX(std::vector<City>& route, const size_t indexf, const size_t indexs)
+void changeRouteX(std::vector<OCity>& route, const size_t indexf, const size_t indexs)
 {
 	// Is this just std::swap(route[indexf], route[indexs]); ?
-	City temp = route[indexf];
+	OCity temp = route[indexf];
 	route.at(indexf) = route[indexs];
 	route.at(indexs) = temp;
 }
 
-std::vector<City> shortestForThreeX(std::vector<City>& route)
+std::vector<OCity> shortestForThreeX(std::vector<OCity>& route)
 {
-	std::vector<City> rCity = route;
+	std::vector<OCity> rCity = route;
 
 	float record = totalDistanceX(route, route.size());
 	changeRouteX(route, 1, 2);
@@ -63,19 +63,19 @@ std::vector<City> shortestForThreeX(std::vector<City>& route)
 	return rCity;
 }
 
-std::vector<std::vector<City>> possibleRoutes(const std::vector<City>& country)
+std::vector<std::vector<OCity>> possibleRoutes(const std::vector<OCity>& country)
 {
-	std::vector<std::vector<City>> allPossibleRoutes;
-	std::vector<City> temp;
-	std::vector<City> a;
-	std::vector<City> b;
+	std::vector<std::vector<OCity>> allPossibleRoutes;
+	std::vector<OCity> temp;
+	std::vector<OCity> a;
+	std::vector<OCity> b;
 
 	size_t len = country.size();
 
 	for(size_t s = 0; s < len; ++s)
 	{
-		a = std::vector<City>(country.begin() + s, country.end());
-		b = std::vector<City>(country.begin(), country.begin() + s);
+		a = std::vector<OCity>(country.begin() + s, country.end());
+		b = std::vector<OCity>(country.begin(), country.begin() + s);
 
 		temp.reserve(a.size() + b.size());
 
@@ -89,21 +89,22 @@ std::vector<std::vector<City>> possibleRoutes(const std::vector<City>& country)
 	return allPossibleRoutes;
 }
 
-std::vector<City> combineTwoRoutes(const std::vector<City>& route1, const std::vector<City>& route2)
+std::vector<OCity> combineTwoRoutes(const std::vector<OCity>& route1,
+									const std::vector<OCity>& route2)
 {
-	std::vector<City> final_route(route1);
+	std::vector<OCity> final_route(route1);
 	final_route.insert(final_route.end(), route2.begin(), route2.end());
 	return final_route;
 }
 
-std::vector<City> joinTwoRoutes(const std::vector<City>& route1, const std::vector<City>& route2)
+std::vector<OCity> joinTwoRoutes(const std::vector<OCity>& route1, const std::vector<OCity>& route2)
 {
-	std::vector<City> combinedRoute;
-	std::vector<City> combinedRouteAlt;
-	std::vector<City> reversedRoute;
-	std::vector<City> routeToBeReturned;
-	std::vector<std::vector<City>> routesForFormer;
-	std::vector<std::vector<City>> routesForLatter;
+	std::vector<OCity> combinedRoute;
+	std::vector<OCity> combinedRouteAlt;
+	std::vector<OCity> reversedRoute;
+	std::vector<OCity> routeToBeReturned;
+	std::vector<std::vector<OCity>> routesForFormer;
+	std::vector<std::vector<OCity>> routesForLatter;
 
 	combinedRoute = combineTwoRoutes(route1, route2);
 	routeToBeReturned = combinedRoute;
@@ -118,7 +119,7 @@ std::vector<City> joinTwoRoutes(const std::vector<City>& route1, const std::vect
 		{
 			combinedRoute = combineTwoRoutes(routesForFormer[a], routesForLatter[b]);
 			reversedRoute =
-				std::vector<City>(routesForLatter[b].rbegin(), routesForLatter[b].rend());
+				std::vector<OCity>(routesForLatter[b].rbegin(), routesForLatter[b].rend());
 			combinedRouteAlt = combineTwoRoutes(routesForFormer[a], reversedRoute);
 
 			if(totalDistanceX(combinedRouteAlt, combinedRouteAlt.size()) <
@@ -146,14 +147,14 @@ uint16_t extentX(const std::vector<uint16_t>& nums)
 	return max - min;
 }
 
-std::vector<std::vector<City>> splitCities(std::vector<City>& route)
+std::vector<std::vector<OCity>> splitCities(std::vector<OCity>& route)
 {
 	std::vector<uint16_t> xValues;
 	std::vector<uint16_t> yValues;
-	std::vector<City> sortedCity;
-	std::vector<City> firstHalf;
-	std::vector<City> secondHalf;
-	std::vector<std::vector<City>> twoSplitCities;
+	std::vector<OCity> sortedCity;
+	std::vector<OCity> firstHalf;
+	std::vector<OCity> secondHalf;
+	std::vector<std::vector<OCity>> twoSplitCities;
 
 	size_t len = route.size();
 	uint16_t smallestX = route[0].x;
@@ -210,8 +211,8 @@ std::vector<std::vector<City>> splitCities(std::vector<City>& route)
 		}
 	}
 
-	firstHalf = std::vector<City>(sortedCity.begin(), sortedCity.end() - (sortedCity.size() / 2));
-	secondHalf = std::vector<City>(sortedCity.begin() + (sortedCity.size() / 2), sortedCity.end());
+	firstHalf = std::vector<OCity>(sortedCity.begin(), sortedCity.end() - (sortedCity.size() / 2));
+	secondHalf = std::vector<OCity>(sortedCity.begin() + (sortedCity.size() / 2), sortedCity.end());
 
 	twoSplitCities.push_back(firstHalf);
 	twoSplitCities.push_back(secondHalf);
@@ -219,7 +220,7 @@ std::vector<std::vector<City>> splitCities(std::vector<City>& route)
 	return twoSplitCities;
 }
 
-std::vector<City> divideAndConquer(std::vector<City>& country, const size_t n)
+std::vector<OCity> divideAndConquer(std::vector<OCity>& country, const size_t n)
 {
 	if(country.size() <= n)
 	{
@@ -227,10 +228,10 @@ std::vector<City> divideAndConquer(std::vector<City>& country, const size_t n)
 	}
 	else
 	{
-		std::vector<std::vector<City>> twoHalves = splitCities(country);
+		std::vector<std::vector<OCity>> twoHalves = splitCities(country);
 
-		std::vector<City> half1 = twoHalves.front();
-		std::vector<City> half2 = twoHalves.back();
+		std::vector<OCity> half1 = twoHalves.front();
+		std::vector<OCity> half2 = twoHalves.back();
 
 		return joinTwoRoutes(divideAndConquer(half1, n), divideAndConquer(half2, n));
 	}
@@ -258,4 +259,3 @@ int main()
 	return 0;
 }
 #endif
-

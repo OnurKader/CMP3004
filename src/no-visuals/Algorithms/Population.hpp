@@ -53,6 +53,19 @@ public:
 		return false;
 	}
 
+	float getShortestDistanceFromPopulation() const
+	{
+		float shortest_distance = FLT_MAX;
+
+		for(const DNA<T, S>& dna: m_population)
+		{
+			const float dist = dna.getDistance();
+			shortest_distance = std::min(dist, shortest_distance);
+		}
+
+		return shortest_distance;
+	}
+
 private:
 	std::array<DNA<T, S>, P> m_population;
 	std::array<float, S> m_fitnesses;

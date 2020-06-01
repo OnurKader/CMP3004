@@ -10,58 +10,50 @@
 #include <array>
 #include <fmt/format.hpp>
 #include <numeric>
-#include <random>
 #include <vector>
 
 template<typename T, size_t S, size_t P>
 class Genetic final
 {
 public:
-	Genetic() : m_population {} {};
+	Genetic() : m_population {}, m_shortest_distance {FLT_MAX} {};
 
 	std::pair<float, std::array<T, S>> exec(const uint8_t log_level = 0U)
 	{
-		//		size_t iter_count = 0ULL;
-		//		while(true)
-		//		{
-		//			m_population.calculateFitness();
-		//			m_population.normalizeFitnesses();
-		//			// fmt::print("\nFitnesses: {}\n", m_population.fitnesses());
-		//			fmt::print("i={}\n", iter_count++);
+		size_t iter_count = 0ULL;
+		while(true)
+		{
+			m_population.calculateFitness();
+			m_population.normalizeFitnesses();
+			// fmt::print("\nFitnesses: {}\n", m_population.fitnesses());
 
-		//			if(m_population.hasShortestPath())
-		//			{
-		//				fmt::print("Shortest Path Reached\n");
-		//				break;
-		//			}
+			if(m_population.hasShortestPath())
+			{
+				fmt::print("Shortest Path Reached\n");
+				break;
+			}
 
-		//			nextGeneration();
+			m_shortest_distance =
+				std::min(m_shortest_distance, m_population.getShortestDistanceFromPopulation());
 
-		//			switch(log_level)
-		//			{
-		//				case 1U: break;
-		//				default: break;
-		//			}
-		//			//			break;
-		//		}
-		DNA<T, S> mother;
-		DNA<T, S> father;
-		fmt::print("m ");
-		mother.printGenes();
-		fmt::print("f ");
-		father.printGenes();
-		DNA<T, S> child = std::move(mother.crossover(father));
-		fmt::print("c ");
-		child.printGenes();
-		child.mutate(0.012f);
-		fmt::print("c ");
-		child.printGenes();
+			fmt::print("Gen {} - shortest_dist: {}\n", iter_count, m_shortest_distance);
+
+			nextGeneration();
+			++iter_count;
+
+			switch(log_level)
+			{
+				case 1U: break;
+				default: break;
+			}
+		}
 
 		return {};
 	}
 
 private:
 	Population<T, S, P> m_population;
+	float m_shortest_distance;
 
 	// Should probably be in Population
 	void nextGeneration() noexcept
@@ -73,7 +65,7 @@ private:
 						  DNA<T, S> father = m_population.chooseParent();
 						  DNA<T, S> mother = m_population.chooseParent();
 						  DNA<T, S> child = father.crossover(mother);
-						  child.mutate(0.012f);
+						  child.mutate(0.015f);
 						  dna = child;
 					  });
 		m_population = new_population;
