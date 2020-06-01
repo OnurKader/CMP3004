@@ -14,7 +14,9 @@ int main()
 	{
 		rt::Timer t_algo("Genetic Algorithm");
 
-		Genetic<uint16_t, city_array.size()> gen;
+		constexpr size_t population_size = 1024;
+
+		Genetic<uint16_t, city_array.size(), population_size> gen;
 		const auto& [distance, shortest_path] = gen.exec(city_array, 1U);
 		fmt::print("Distance: {}\nArray: {}\n", distance, shortest_path);
 	}

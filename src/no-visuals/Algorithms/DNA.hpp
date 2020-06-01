@@ -12,12 +12,7 @@
 static std::random_device s_random_device {};
 static std::default_random_engine s_def_random_engine {s_random_device()};
 
-template<typename T, size_t S>
-bool isUnique(std::array<T, S> unsorted_array)
-{
-	std::sort(unsorted_array.begin(), unsorted_array.end());
-	return std::adjacent_find(unsorted_array.begin(), unsorted_array.end()) == unsorted_array.end();
-}
+static constexpr auto& ga_city_array = cities;
 
 // Maybe I should do SFINAE
 template<typename T>
@@ -46,20 +41,16 @@ public:
 		std::shuffle(m_genes.begin(), m_genes.end(), s_def_random_engine);
 	}
 
-	float calculateFitness(const std::array<T, S>& target_city_array)
+	float calculateFitness(const std::array<T, S>& target_city_order)
 	{
-		size_t score = 0ULL;
+		float score = 0.f;
 		for(size_t i = 0ULL; i < S; ++i)
-			if(m_genes[i] == target_city_array[i])
+			if(m_genes[i] == target_city_order[i])
 				++score;
 
-		// Check if all genes are unique, if mutate somehow results in a 'set' of genes then we
-		// should reward it? Well this also applies to the initial point of the genes
-		const bool are_genes_all_unique = isUnique(m_genes);
-		if(are_genes_all_unique)
-			score += 2ULL;
+		score += getTotalDistanceOfCities(ga_city_array, target_city_order);
 
-		m_fitness = static_cast<float>(score) / S;
+		m_fitness = score / S;
 		return m_fitness;
 	}
 
@@ -70,9 +61,6 @@ public:
 	{
 		DNA child_dna;
 
-		// TODO: Move the uniform distributor somewhere else?
-		// Maybe a global templated function with the size so it returns what we want using the def
-		// engine?
 		const size_t first = randomFromRange(0UL, S - 2UL);
 		const size_t last = randomFromRange(first + 1UL, S - 1UL);
 
