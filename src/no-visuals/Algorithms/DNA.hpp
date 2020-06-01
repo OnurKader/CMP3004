@@ -48,7 +48,10 @@ public:
 			if(m_genes[i] == target_city_order[i])
 				++score;
 
-		score += getTotalDistanceOfCities(ga_city_array, target_city_order);
+		// FIXME: Instead of 1.f / ... get a more sensible value, maybe just look at the 2 furthest
+		// cities and get the max distance from them
+		score +=
+			1.f / (std::pow(getTotalDistanceOfCities(ga_city_array, target_city_order), 6.f) + 1.f);
 
 		m_fitness = score / S;
 		return m_fitness;
@@ -56,6 +59,8 @@ public:
 
 	T& gene(const size_t index = 0ULL) noexcept { return m_genes[index]; }
 	const T& gene(const size_t index = 0ULL) const noexcept { return m_genes[index]; }
+
+	float fitness() const noexcept { return m_fitness; }
 
 	DNA crossover(const DNA& other)
 	{
