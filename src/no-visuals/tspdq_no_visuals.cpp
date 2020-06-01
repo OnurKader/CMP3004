@@ -138,7 +138,7 @@ std::vector<City> joinTwoRoutes(const std::vector<City>& route1, const std::vect
 	return routeToBeReturned;
 }
 
-uint16_t extent(const std::vector<uint16_t>& nums)
+uint16_t extentX(const std::vector<uint16_t>& nums)
 {
 	const uint16_t min = *std::min_element(nums.begin(), nums.end());
 	const uint16_t max = *std::max_element(nums.begin(), nums.end());
@@ -166,7 +166,7 @@ std::vector<std::vector<City>> splitCities(std::vector<City>& route)
 		yValues.push_back(route[s].y);
 	}
 
-	if(extent(xValues) > extent(yValues))
+	if(extentX(xValues) > extentX(yValues))
 	{
 		for(size_t s = 0; s < len; s++)
 		{
