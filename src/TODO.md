@@ -3,12 +3,13 @@
 ## Design
 
 - ~~Draw the US Map and plot the nodes on it~~
-- ~~Have a macro for enabling/disabling drawing using SFML -DDRAW -DVISUAL
-something like that~~
-- ~~Add a test case (?) a smaller file with fewer points~~ and a known path
-- Change everything from iostream to libfmt
-- Move Runtime and Constexpr utils to a single file
-
+- ~~Add a test case (?) a smaller file with fewer points~~
+- ~~I messed up the drawing, the y axis is flipped~~
+- ~~Change everything from iostream to libfmt~~
+- ~~Move Runtime and Constexpr utils to a single file~~
+- Repetitive Nearest Neighbour, start from different cities and find the shortest
+- Improve the tour by reversing some segments to see if there are crosses
+if there are, then they will be resolved
 
 ___
 
@@ -28,6 +29,7 @@ ___
 - Remove all instances of sqrt, constexpr or not, just square everything,
 see if you get the same result, if it's the same, just removing sqrt
 should result in a big boost in performance
+- Kruskal Spanning Tree and Held-Karp
 
 ___
 

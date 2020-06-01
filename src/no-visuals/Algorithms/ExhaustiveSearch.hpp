@@ -23,7 +23,8 @@ public:
 	}
 
 	// Multi-threaded for_each?
-	float exec(const std::array<City, S>& city_array, const uint8_t log_level = 0U)
+	std::pair<float, std::array<T, S>> exec(const std::array<City, S>& city_array,
+												   const uint8_t log_level = 0U)
 	{
 		for(size_t i = 0ULL; i < ctx::factorial(m_array.size()); ++i)
 		{
@@ -52,7 +53,7 @@ public:
 		if(exhaustive_out)
 			fmt::print(exhaustive_out, "{}\n", m_array);
 
-		return m_shortest_distance;
+		return std::make_pair(m_shortest_distance, m_array);
 	}
 
 private:

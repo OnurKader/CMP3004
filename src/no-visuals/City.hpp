@@ -43,6 +43,11 @@ struct City final
 												City(99, 2000),
 												City(4621, 3023)};
 
+[[maybe_unused]] constexpr static std::array<uint16_t, 48U> shortest_path_for_48 {
+	0, 7,  37, 30, 43, 17, 6, 27, 5, 36, 18, 26, 16, 42, 29, 35, 45, 32, 19, 46, 20, 31, 38, 47,
+	4, 41, 23, 9,  44, 34, 3, 25, 1, 28, 33, 40, 15, 21, 2,	 22, 13, 24, 12, 10, 11, 14, 39, 8};
+
+// FIXME: Change uint16_t to a template type T
 template<size_t S>
 constexpr float getTotalDistanceOfCities(const std::array<City, S>& city_arr,
 										 const std::array<uint16_t, S>& index_array) noexcept
@@ -59,4 +64,19 @@ constexpr float getTotalDistanceOfCities(const std::array<City, S>& city_arr,
 	result += city_arr[index_array.front()].dist(city_arr[index_array.back()]);
 
 	return result;
+}
+
+template<size_t S>
+constexpr void resetVisitedStateForAllCities(std::array<City, S>& city_arr) noexcept
+{
+	std::for_each(city_arr.begin(), city_arr.end(), [](City& city) { city.visited = false; });
+}
+
+template<size_t S>
+constexpr bool allCitiesVisited(const std::array<City, S>& city_arr) noexcept
+{
+	return std::all_of(
+		city_arr.cbegin(), city_arr.cend(), [](const auto& elem) constexpr {
+			return elem.visited;
+		});
 }

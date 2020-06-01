@@ -1,6 +1,6 @@
-CXX=g++-10
-CXX_FLAGS=-Wall -Wextra -Wshadow -Wpedantic -O3 -std=c++2a
-CXX_LIBS=
+CXX=g++
+CXX_FLAGS= -Wall -Wextra -Wshadow -Wpedantic -O3 -std=c++2a
+CXX_LIBS= -lfmt
 
 EXEC_NAME=TSP_File
 OBJECTS=$(patsubst %.cpp,%.o,$(wildcard *.cpp))
@@ -19,4 +19,7 @@ $(EXEC_NAME): $(OBJECTS)
 
 %.o: %.cpp
 	$(CXX) -o $@ -c $< $(CXX_LIBS) $(CXX_FLAGS)
+
+dq:
+	$(CXX) -o TSP_File tspdq_no_visuals.cpp $(CXX_LIBS) $(CXX_FLAGS)
 
