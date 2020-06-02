@@ -25,7 +25,7 @@ float totalDistanceX(const std::vector<OCity>& route, const size_t size)
 
 void printCountryX(const std::vector<OCity>& route)
 {
-	std::for_each(route.cbegin(), route.cend(), [i = 1ULL](const OCity& city) mutable {
+	std::for_each(route.cbegin(), route.cend(), [&route, i = 1ULL](const OCity& city) mutable {
 		fmt::print("Route {} -> x: {} y: {}\n", i++, city.x, city.y);
 	});
 }
@@ -240,22 +240,25 @@ std::vector<OCity> divideAndConquer(std::vector<OCity>& country, const size_t n)
 #if 0
 int main()
 {
-	std::vector<City> conversion {
-		City(6734, 1453), City(2233, 10),	City(5530, 1424), City(401, 841),	City(3082, 1644),
-		City(7608, 4458), City(7573, 3716), City(7265, 1268), City(6898, 1885), City(1112, 2049),
-		City(5468, 2606), City(5989, 2873), City(4706, 2674), City(4612, 2035), City(6347, 2683),
-		City(6107, 669),  City(7611, 5184), City(7462, 3590), City(7732, 4723), City(5900, 3561),
-		City(4483, 3369), City(6101, 1110), City(5199, 2182), City(1633, 2809), City(4307, 2322),
-		City(675, 1006),  City(7555, 4819), City(7541, 3981), City(3177, 756),	City(7352, 4506),
-		City(7545, 2801), City(3245, 3305), City(6426, 3173), City(4608, 1198), City(23, 2216),
-		City(7248, 3779), City(7762, 4595), City(7392, 2244), City(3484, 2829), City(6271, 2135),
-		City(4985, 140),  City(1916, 1569), City(7280, 4899), City(7509, 3239), City(10, 2676),
-		City(6807, 2993), City(5185, 3258), City(3023, 1942)};
+	std::vector<OCity> conversion{
+		OCity(6734, 1453), OCity(2233, 10),	  OCity(5530, 1424), OCity(401, 841),
+		OCity(3082, 1644), OCity(7608, 4458), OCity(7573, 3716), OCity(7265, 1268),
+		OCity(6898, 1885), OCity(1112, 2049), OCity(5468, 2606), OCity(5989, 2873),
+		OCity(4706, 2674), OCity(4612, 2035), OCity(6347, 2683), OCity(6107, 669),
+		OCity(7611, 5184), OCity(7462, 3590), OCity(7732, 4723), OCity(5900, 3561),
+		OCity(4483, 3369), OCity(6101, 1110), OCity(5199, 2182), OCity(1633, 2809),
+		OCity(4307, 2322), OCity(675, 1006),  OCity(7555, 4819), OCity(7541, 3981),
+		OCity(3177, 756),  OCity(7352, 4506), OCity(7545, 2801), OCity(3245, 3305),
+		OCity(6426, 3173), OCity(4608, 1198), OCity(23, 2216),	 OCity(7248, 3779),
+		OCity(7762, 4595), OCity(7392, 2244), OCity(3484, 2829), OCity(6271, 2135),
+		OCity(4985, 140),  OCity(1916, 1569), OCity(7280, 4899), OCity(7509, 3239),
+		OCity(10, 2676),   OCity(6807, 2993), OCity(5185, 3258), OCity(3023, 1942)};
 
-	std::vector<City> citiesPro = divideAndConquer(conversion, 3);
+	std::vector<OCity> citiesPro = divideAndConquer(conversion, 3);
 	printCountryX(citiesPro);
 	fmt::print("\nDistance: {}\n", totalDistanceX(citiesPro, citiesPro.size()));
 
 	return 0;
 }
+
 #endif

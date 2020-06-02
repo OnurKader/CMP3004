@@ -57,6 +57,7 @@ public:
 
 						prev_shortest_distance = m_shortest_distance;
 						shortest_path = m_population.getShortestPathFromPopulation();
+						fmt::print("Array: {}\n", shortest_path);
 					}
 					break;
 				case 2U: fmt::print("\nFitnesses: {}\n", m_population.fitnesses()); break;
