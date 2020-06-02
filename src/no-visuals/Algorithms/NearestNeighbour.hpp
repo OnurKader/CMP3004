@@ -7,6 +7,7 @@
 #include <array>
 #include <cfloat>
 #include <fmt/format.hpp>
+#include <fmt/ostream.hpp>
 #include <fstream>
 #include <numeric>
 
@@ -14,7 +15,7 @@ template<typename T, size_t S>
 class NearestNeighbour final
 {
 public:
-	NearestNeighbour() : m_index_array {0U} {}
+	NearestNeighbour() : m_index_array{0U} {}
 
 	std::pair<float, std::array<T, S>> exec(std::array<City, S>& city_array,
 											const uint8_t log_level = 0U)
@@ -47,10 +48,11 @@ public:
 
 		const float distance_of_nn_path = getTotalDistanceOfCities(city_array, m_index_array);
 
-		std::ofstream out_file("nn_output.txt");
+		std::ofstream out_file{"nn_output.txt"};
 		if(out_file)
 		{
-			fmt::print("{}\nDistance: {}\n", m_index_array, distance_of_nn_path);
+			fmt::print(out_file, "{}\nDistance: {}\n", m_index_array, distance_of_nn_path);
+			out_file.flush();
 		}
 
 		return std::make_pair(distance_of_nn_path, m_index_array);
