@@ -30,7 +30,7 @@ public:
 
 		// FIXME: Instead of 1.f / ... get a more sensible value, maybe just look at the 2 furthest
 		// cities and get the max distance from them
-		score += 1.f / (std::pow(getDistance(), 8.f) + 1.f);
+		score += 1.f / (std::pow(getDistance(), 2.f) + 1.f);
 
 		return m_fitness = score / S;
 	}
@@ -54,8 +54,6 @@ public:
 		for(size_t i = first; i < last; ++i)
 			child_dna.m_genes[i] = this->m_genes[i];
 
-		fmt::print("before: {}\n", child_dna.m_genes);
-
 		for(size_t i = 0ULL; i < other.m_genes.size(); ++i)
 			if(!child_dna.contains(other.m_genes[i]))
 				for(size_t j = 0ULL; j < child_dna.m_genes.size(); ++j)
@@ -64,8 +62,6 @@ public:
 						child_dna.m_genes[j] = other.m_genes[i];
 						break;
 					}
-
-		fmt::print("after:  {}\n", child_dna.m_genes);
 
 		return child_dna;
 	}

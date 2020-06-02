@@ -21,7 +21,7 @@ int main()
 		constexpr float mutation_rate = 0.015f;
 		Genetic<uint16_t, city_array.size(), population_size> gen(mutation_rate);
 		const auto& [distance, shortest_path] = gen.exec(1U);
-		fmt::print("Final Distance: {}\nArray: {}\n", distance, shortest_path);
+		fmt::print("Final Distance: {}\nFinal Array: {}\n", distance, shortest_path);
 	}
 
 	return 0;
