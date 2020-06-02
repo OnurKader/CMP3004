@@ -17,6 +17,7 @@ struct City final
 
 	constexpr bool operator==(const City& other) const { return (x == other.x && y == other.y); }
 	constexpr bool operator!=(const City& other) const { return (x != other.x || y != other.y); }
+	// constexpr bool operator<=>(const City& other) const = default;
 
 	uint16_t x;
 	uint16_t y;

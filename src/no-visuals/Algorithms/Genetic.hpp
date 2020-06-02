@@ -1,6 +1,7 @@
 #pragma once
 
 // FIXME: Replace all DNA<T, S> with a using statement to like RDNA or PDNA
+// using PDNA = DNA<T, S>; // in Genetic
 
 #include "City.hpp"
 #include "Population.hpp"

@@ -93,9 +93,4 @@ public:
 private:
 	std::array<DNA<T, S>, P> m_population;
 	std::array<float, S> m_fitnesses;
-
-	//	DNA<T, S> m_best_dna_ever {};
-	//	float m_best_fitness_ever {};
-	//	DNA<T, S> m_current_best_dna {};
-	//	float m_current_best_fitness {};
 };
