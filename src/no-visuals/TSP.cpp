@@ -17,7 +17,7 @@ int main()
 	{
 		rt::Timer algorithm_timer("Genetic Algorithm");
 
-		constexpr size_t population_size = 1024ULL;
+		constexpr size_t population_size = 2048ULL;
 		constexpr float mutation_rate = 0.01f;
 		Genetic<uint16_t, city_array.size(), population_size> gen(mutation_rate);
 		const auto& [distance, shortest_path] = gen.exec(1U);

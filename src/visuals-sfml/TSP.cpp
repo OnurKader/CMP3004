@@ -85,9 +85,9 @@ int main()
 			++count;
 		}
 		auto& last_best = program.vertexArray2()[program.vertexArray2().getVertexCount() - 1ULL];
-		last_best.position.x = program.cities()[0].windowPosition().x;
+		last_best.position.x = program.cities()[best_index_array.front()].windowPosition().x;
 		last_best.position.y =
-			program.window().getSize().y - program.cities()[0].windowPosition().y;
+			program.window().getSize().y - program.cities()[best_index_array.front()].windowPosition().y;
 		last_best.color = sf::Color::Magenta;
 
 		if(!program.run())
