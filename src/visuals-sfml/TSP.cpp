@@ -1,5 +1,5 @@
-#include "Algorithms.hpp"
 #include "Program.hpp"
+#include "Utilities.hpp"
 
 #include <SFML/Graphics.hpp>
 #include <array>
@@ -70,4 +70,3 @@ int main()
 
 	return 0;
 }
-
