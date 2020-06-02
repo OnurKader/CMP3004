@@ -1,8 +1,8 @@
 include_rules
 
-CXX_FLAGS += -IAlgorithms -I.
+CXX_FLAGS += -IAlgorithmsForVisuals -I.
 CXX_LIBS += `pkg-config --cflags --libs sfml-all` -lfmt
 EXE := TSP_Window
 
 : foreach *.cpp | *.hpp |> !cxx |> {objs}
-: {objs} |> $(CXX) -o %o %f $(CXX_LIBS) $(CXX_FLAGS) |> $(EXE)
+: {objs} AlgorithmsForVisuals/*.o |> $(CXX) -o %o %f $(CXX_LIBS) $(CXX_FLAGS) |> $(EXE)

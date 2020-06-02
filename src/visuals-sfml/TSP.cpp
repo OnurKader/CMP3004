@@ -1,5 +1,6 @@
-#include "Program.hpp"
-#include "Utilities.hpp"
+#include "./Program.hpp"
+#include "./Utilities.hpp"
+#include "AlgorithmsForVisuals/Genetic.hpp"
 
 #include <SFML/Graphics.hpp>
 #include <array>
@@ -12,61 +13,56 @@
 #define FILE "cities.txt"
 #endif
 
-constexpr std::array greyscale_table = {
-	30U,  34U,	38U,  42U,	46U,  50U,	54U,  58U,	62U,  66U,	70U,  74U,	78U,  82U,	86U,  90U,
-	94U,  98U,	102U, 106U, 110U, 114U, 118U, 122U, 126U, 130U, 134U, 138U, 142U, 146U, 150U, 154U,
-	158U, 162U, 166U, 170U, 174U, 178U, 182U, 186U, 190U, 194U, 198U, 202U, 206U, 210U, 214U, 218U};
-
 sf::Color getColor(size_t current, size_t max)
 {
-	return sf::Color(127, 127, std::lerp(255.f, 0.f, (current + 0.f) / max));
+	return sf::Color(255.f, std::lerp(255.f, 0.f, (current + 0.f) / max), 248.f);
+}
+
+void fillVertexArrayWithRegularArray(sf::VertexArray& va, const std::array<uint16_t, 48>& arr)
+{
+	for(size_t i = 0ULL; i < va.getVertexCount(); ++i)
+	{
+		va[i].position.x = cities[arr[i]].x;
+		va[i].position.y = cities[arr[i]].y;
+	}
 }
 
 int main()
 {
 	Program program("../../data/" FILE, 1440U, 920U);
-	Lexicographical lex(program);
-	// Use a function here before running and see the output on the window!
-
-	/* for(size_t i = 0ULL; i < program.cities().size() - 1ULL; ++i) */
-	/* { */
-	/* 	fmt::print("Distance between {} and {} is: {:.1f}\n", */
-	/* 			   i, */
-	/* 			   i + 1, */
-	/* 			   program.cities()[i].dist(program.cities()[i + 1])); */
-	/* } */
-
 	// [ 0, 5, 1, 6, 3, 7, 2, 4, 0 ]
 	// [ 0, 8, 37, 30, 43, 17, 6, 27, 35, 29, 5, 36, 18, 26, 42, 16, 45, 32, 14, 11, 10, 22, 13, 24,
 	// 12, 20, 46, 19, 39, 2, 21, 15, 40, 33, 28, 4, 47, 38, 31, 23, 9, 41, 25, 3, 34, 44, 1, 7 ]
+	std::array<uint16_t, 48> index_array {0,  8,  37, 30, 43, 17, 6,  27, 35, 29, 5,  36,
+										  18, 26, 42, 16, 45, 32, 14, 11, 10, 22, 13, 24,
+										  12, 20, 46, 19, 39, 2,  21, 15, 40, 33, 28, 4,
+										  47, 38, 31, 23, 9,  41, 25, 3,  34, 44, 1,  7};
 
+	Genetic<uint16_t, cities.size(), 1024ULL> ga(0.015f);
 	while(program.window().isOpen())
 	{
-		/* for(size_t i = 0ULL; i < program.vertexArray().getVertexCount() - 1ULL; ++i) */
+		// Change vertexArray here to affect the results;
+		const float shortest_distance = ga.exec(index_array);
+
 		size_t count = 0ULL;
-		for(const size_t i: {0,	 8,	 37, 30, 43, 17, 6,	 27, 35, 29, 5,	 36, 18, 26, 42, 16,
-							 45, 32, 14, 11, 10, 22, 13, 24, 12, 20, 46, 19, 39, 2,	 21, 15,
-							 40, 33, 28, 4,	 47, 38, 31, 23, 9,	 41, 25, 3,	 34, 44, 1,	 7})
+		for(const size_t i: index_array)
 		{
 			program.vertexArray()[count].position.x = program.cities()[i].windowPosition().x;
 			program.vertexArray()[count].position.y =
 				program.window().getSize().y - program.cities()[i].windowPosition().y;
-			/* const auto grey = greyscale_table[i]; */
-			/* program.vertexArray()[count++].color = sf::Color(128U - grey, grey, 255U - grey); */
-			program.vertexArray()[count++].color = getColor(i, 48);
+			program.vertexArray()[count].color = getColor(count, index_array.size());
+			++count;
 		}
 		auto& last = program.vertexArray()[program.vertexArray().getVertexCount() - 1ULL];
 		last.position.x = program.cities()[0].windowPosition().x;
 		last.position.y = program.window().getSize().y - program.cities()[0].windowPosition().y;
-		/* auto grey = greyscale_table[9U * 4U + 1U]; */
-		/* last.color = sf::Color(128U - grey, grey, 255U - grey); */
 		last.color = getColor(48, 48);
 
 		if(!program.run())
 			break;
 	}
 
-	//	fmt::print("Thanks! Hope you enjoyed our program ^_^\n");
+	fmt::print("Thanks! Hope you enjoyed our program ^_^\n");
 
 	return 0;
 }

@@ -61,7 +61,7 @@ Program::Program(const char* filename, const uint16_t win_width, const uint16_t 
 	m_background_color(sf::Color::Black),
 	m_vertex_array(sf::LineStrip)
 {
-	m_window.setVerticalSyncEnabled(true);
+	m_window.setVerticalSyncEnabled(false);
 	m_window.setActive(true);
 	m_window.setPosition({960 - win_width / 2, 540 - win_height / 2});
 
@@ -148,12 +148,11 @@ bool Program::run()
 		m_window.draw(city);
 	}
 
-	auto circle = sf::CircleShape(10);
-	circle.setFillColor(sf::Color::Red);
-	circle.setPosition(m_vertex_array[m_vertex_array.getVertexCount() - 1ULL].position);
-	m_window.draw(circle);
+	//	auto circle = sf::CircleShape(10);
+	//	circle.setFillColor(sf::Color::Red);
+	//	circle.setPosition(m_vertex_array[m_vertex_array.getVertexCount() - 1ULL].position);
+	//	m_window.draw(circle);
 
 	m_window.display();
 	return true;
 }
-
