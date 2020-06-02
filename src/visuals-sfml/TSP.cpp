@@ -17,7 +17,7 @@
 
 sf::Color getColor(size_t current, size_t max)
 {
-	return sf::Color(255, std::lerp(255.f, 0.f, (current + 0.f) / max), 248, 82U);
+	return sf::Color(255, std::lerp(255.f, 0.f, (current + 0.f) / max), 248);
 }
 
 void fillVertexArrayWithRegularArray(sf::VertexArray& va, const std::array<uint16_t, 48>& arr)
@@ -65,13 +65,14 @@ int main()
 			program.vertexArray()[count].position.x = program.cities()[i].windowPosition().x;
 			program.vertexArray()[count].position.y =
 				program.window().getSize().y - program.cities()[i].windowPosition().y;
-			program.vertexArray()[count].color = getColor(count, index_array.size());
+			//			program.vertexArray()[count].color = getColor(count, index_array.size());
+			program.vertexArray()[count].color = sf::Color(208, 208, 208, 60);
 			++count;
 		}
 		auto& last = program.vertexArray()[program.vertexArray().getVertexCount() - 1ULL];
 		last.position.x = program.cities()[0].windowPosition().x;
 		last.position.y = program.window().getSize().y - program.cities()[0].windowPosition().y;
-		last.color = getColor(48, 48);
+		last.color = sf::Color(208, 208, 208, 60);
 
 		count = 0ULL;
 
