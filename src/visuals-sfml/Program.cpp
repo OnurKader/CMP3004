@@ -59,7 +59,8 @@ Program::Program(const char* filename, const uint16_t win_width, const uint16_t 
 			 sf::Style::Close | sf::Style::Titlebar,
 			 settings),
 	m_background_color(sf::Color::Black),
-	m_vertex_array(sf::LineStrip)
+	m_vertex_array(sf::LineStrip),
+	m_vertex_array_2(sf::LineStrip)
 {
 	m_window.setVerticalSyncEnabled(false);
 	m_window.setActive(true);
@@ -100,14 +101,11 @@ Program::Program(const char* filename, const uint16_t win_width, const uint16_t 
 		m_bottom_right.y = std::max(m_bottom_right.y, y);
 	}
 
-	// TODO: Deal with the scale later, maybe don't make City drawable
-	// I think I'll do a function call to something like normalizeCities or which will
-	// update the positions of every City
 	normalizeCities(*this);
 
 	// Prepare the VertexArray for drawing
 	m_vertex_array.resize(m_cities.size() + 1ULL);
-	//	fmt::print("File {} parsed successfully with {} cities\n", filename, m_cities.size());
+	m_vertex_array_2.resize(m_cities.size() + 1ULL);
 }
 
 Program::~Program() { m_window.close(); }
@@ -142,16 +140,12 @@ bool Program::run()
 #endif
 
 	m_window.draw(m_vertex_array);
+	m_window.draw(m_vertex_array_2);
 
 	for(const auto& city: m_cities)
 	{
 		m_window.draw(city);
 	}
-
-	//	auto circle = sf::CircleShape(10);
-	//	circle.setFillColor(sf::Color::Red);
-	//	circle.setPosition(m_vertex_array[m_vertex_array.getVertexCount() - 1ULL].position);
-	//	m_window.draw(circle);
 
 	m_window.display();
 	return true;

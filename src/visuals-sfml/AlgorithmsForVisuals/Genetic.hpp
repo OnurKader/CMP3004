@@ -19,7 +19,7 @@ public:
 	Genetic(const float mutation_rate) :
 		m_population {}, m_shortest_distance {FLT_MAX}, m_mutation_rate {mutation_rate} {};
 
-	float exec(std::array<T, S>& array_to_fill)
+	float exec(std::array<T, S>& array_to_fill, std::array<T, S>& best_one)
 	{
 		float prev_shortest_distance = m_shortest_distance;
 
@@ -42,8 +42,11 @@ public:
 
 			prev_shortest_distance = m_shortest_distance;
 			const auto shortest_path = m_population.getShortestPathFromPopulation();
-			std::copy(shortest_path.cbegin(), shortest_path.cend(), array_to_fill.begin());
+			std::copy(shortest_path.cbegin(), shortest_path.cend(), best_one.begin());
 		}
+
+		const auto shortest_path = m_population.getShortestPathFromPopulation();
+		std::copy(shortest_path.cbegin(), shortest_path.cend(), array_to_fill.begin());
 
 		nextGeneration();
 		++m_iter_count;
